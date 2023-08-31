@@ -17,7 +17,7 @@ const kintoneModuleHack = (port: number) => {
   return `(function () {
     const script = document.createElement("script");
     script.type = "module";
-    script.src = "https://localhost:${port}/src/main.ts";
+    script.src = "https://127.0.0.1:${port}/src/main.ts";
     document.body.appendChild(script);
   })();
   `;

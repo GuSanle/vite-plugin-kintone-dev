@@ -1,5 +1,5 @@
 import kintoneApi from "./kintoneApi";
-import logger from "./logger";
+// import logger from "./logger";
 import path from "node:path";
 const devFileName = "kintone_module_hack.js";
 
@@ -86,8 +86,8 @@ export default async function devUpdate(
     ];
     //更新系统设置
     await k.updateSystemSetting(scope, jsFiles);
-    return logger.info("file update success");
+    // return logger.info("file update success");
   } catch (err) {
-    return logger.info(err as string);
+    // return logger.info(err as string);
   }
 }
