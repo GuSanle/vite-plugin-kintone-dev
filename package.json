@@ -1,8 +1,9 @@
 {
   "name": "vite-plugin-kintone-dev",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "vite plugin for developement kintone",
   "main": "dist/index.js",
+  "type": "module",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts"
