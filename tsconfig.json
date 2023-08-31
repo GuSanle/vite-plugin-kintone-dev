@@ -1,0 +1,12 @@
+{
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "lib": ["ESNext"],
+  },
+}
