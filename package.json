@@ -1,13 +1,16 @@
 {
   "name": "vite-plugin-kintone-dev",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "vite plugin for developement kintone",
   "main": "dist/index.js",
   "module": "dist/index.js",
+  "files": [
+    "dist"
+  ],
   "type": "module",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsup src/index.ts --format esm --dts"
+    "build": "tsup src/index.ts --format esm --dts --clean"
   },
   "homepage": "https://github.com/GuSanle/vite-plugin-kintone-dev",
   "repository": "https://github.com/GuSanle/vite-plugin-kintone-dev.git",
