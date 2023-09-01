@@ -36,6 +36,9 @@ export default function kintoneDev(
       let port = 5173;
       port = await getNextPort(port);
       config.server.port = port;
+      if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir);
+      }
       outputClean(outputDir);
       const fileUrl = path.resolve(outputDir, fileName);
       fs.writeFileSync(fileUrl, kintoneModuleHack(port));
