@@ -1,15 +1,22 @@
 {
   "name": "vite-plugin-kintone-dev",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "vite plugin for developement kintone",
-  "module": "dist/index.mjs",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --dts --format cjs,esm"
+    "build": "tsup"
   },
   "homepage": "https://github.com/GuSanle/vite-plugin-kintone-dev",
   "repository": "https://github.com/GuSanle/vite-plugin-kintone-dev.git",
@@ -27,6 +34,7 @@
     "vite": "^4.4.9"
   },
   "dependencies": {
-    "axios": "^1.5.0"
+    "axios": "^1.5.0",
+    "cheerio": "^1.0.0-rc.12"
   }
 }
