@@ -5,7 +5,7 @@
 
 English | [日本語](https://github.com/GuSanle/vite-plugin-kintone-dev/blob/main/README.ja.md) | [简体中文](https://github.com/GuSanle/vite-plugin-kintone-dev/blob/main/README.zh-CN.md)
 
-This is a Vite plugin that allows you to develop for Kintone using Vite. We know that Vite uses ESM for module loading, but when uploading custom JavaScript to Kintone, you cannot specify the use of ESM for loading. With this plugin, you can use ESM module loading for your code during local development, enabling Vite builds. With HMR, your development experience will be as fast as lightning.
+This is a Vite plugin that allows you to develop for kintone using Vite. We know that Vite uses ESM for module loading, but when uploading custom JavaScript to kintone, you cannot specify the use of ESM for loading. With this plugin, you can use ESM module loading for your code during local development, enabling Vite builds. With HMR, your development experience will be as fast as lightning.
 
 ## Install
 
@@ -27,7 +27,7 @@ import kintoneDev from "vite-plugin-kintone-dev";
 //type: "DESKTOP" | "MOBILE"   (on Desktop or on Mobile)
 export default defineConfig({
   plugins: [
-    kintoneDev({platform: "APP";type: "DESKTOP"}),
+    kintoneDev({platform: "APP",type: "DESKTOP"}),
     // kintoneDev({platform: "APP";type: "MOBILE"}),
     // kintoneDev({platform: "PORTAL";type: "DESKTOP"}),
     // kintoneDev({platform: "PORTAL";type: "MOBILE"}),
@@ -44,6 +44,9 @@ VITE_KINTONE_PASSWORD=a
 ## if you are developing in "app", please set the VITE_APP
 VITE_KINTONE_APP=1
 ```
+
+## Example
+kintone + vue example: [vue3-porject-kintone-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/vue3-porject-kintone-demo)
 
 
 

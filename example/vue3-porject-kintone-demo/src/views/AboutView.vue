@@ -4,12 +4,10 @@
   </div>
 </template>
 
-<style>
-@media (min-width: 1024px) {
-  .about {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
+<style scoped>
+.about {
+  background-color: white;
+  margin: 30px;
+  padding: 20px;
 }
 </style>

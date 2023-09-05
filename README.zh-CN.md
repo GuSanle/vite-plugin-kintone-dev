@@ -28,7 +28,7 @@ import kintoneDev from "vite-plugin-kintone-dev";
 //type: "DESKTOP" | "MOBILE"   (PC端 or 移动端)
 export default defineConfig({
   plugins: [
-    kintoneDev({platform: "APP";type: "DESKTOP"}),
+    kintoneDev({platform: "APP",type: "DESKTOP"}),
     // kintoneDev({platform: "APP";type: "MOBILE"}),
     // kintoneDev({platform: "PORTAL";type: "DESKTOP"}),
     // kintoneDev({platform: "PORTAL";type: "MOBILE"}),
@@ -46,6 +46,9 @@ VITE_KINTONE_PASSWORD=a
 ## 如果你是应用的开发，请设置应用id
 VITE_KINTONE_APP=1
 ```
+
+## Example
+kintone + vue example: [vue3-porject-kintone-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/vue3-porject-kintone-demo)
 
 
 

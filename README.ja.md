@@ -5,7 +5,7 @@
 
 [English](https://github.com/GuSanle/vite-plugin-kintone-dev/blob/main/README.md)  | 日本語 | [简体中文](https://github.com/GuSanle/vite-plugin-kintone-dev/blob/main/README.zh-CN.md)
 
-これは、Viteを使用してKintoneの開発を行うためのViteプラグインです。Viteはモジュールの読み込みにESMを使用していることを知っていますが、カスタムJavaScriptをKintoneにアップロードする際にESMを使用することを指定することはできません。このプラグインを使用すると、ローカル開発時にコードのESMモジュールの読み込みを可能にし、Viteビルドを実現できます。HMRを使用することで、開発体験は稲妻のように速くなります。
+これは、Viteを使用してkintoneの開発を行うためのViteプラグインです。Viteはモジュールの読み込みにESMを使用していることを知っていますが、カスタムJavaScriptをkintoneにアップロードする際にESMを使用することを指定することはできません。このプラグインを使用すると、ローカル開発時にコードのESMモジュールの読み込みを可能にし、Viteビルドを実現できます。HMRを使用することで、開発体験は稲妻のように速くなります。
 
 ## Install
 
@@ -27,7 +27,7 @@ import kintoneDev from "vite-plugin-kintone-dev";
 //type: "DESKTOP" | "MOBILE"   (on Desktop or on Mobile)
 export default defineConfig({
   plugins: [
-    kintoneDev({platform: "APP";type: "DESKTOP"}),
+    kintoneDev({platform: "APP",type: "DESKTOP"}),
     // kintoneDev({platform: "APP";type: "MOBILE"}),
     // kintoneDev({platform: "PORTAL";type: "DESKTOP"}),
     // kintoneDev({platform: "PORTAL";type: "MOBILE"}),
@@ -44,5 +44,8 @@ VITE_KINTONE_PASSWORD=a
 ## if you are developing in "app", please set the VITE_APP
 VITE_KINTONE_APP=1
 ```
+
+## Example
+kintone + vue example: [vue3-porject-kintone-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/vue3-porject-kintone-demo)
 
 
