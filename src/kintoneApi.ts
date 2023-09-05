@@ -1,31 +1,14 @@
 import axios, { Axios } from "axios";
 import fs from "node:fs";
 import FormData from "form-data";
-
-type ScriptsList = {
-  locationType: string;
-  type: string;
-  name: string;
-  contentUrl: string;
-  contentId: string;
-}[];
-
-type jsFiles = {
-  jsType: string;
-  fileKeys: string[];
-};
-
-interface UploadFileResponse {
-  fileKey: string;
-}
-
-interface GetSystemSettingResponse {
-  result: { scripts: ScriptsList; scope: string };
-}
-
-interface UpdateSystemSettingResponse {
-  result: object;
-}
+import {
+  type jsFiles,
+  type UploadFileResponse,
+  type GetSystemSettingResponse,
+  type GetAppSettingResponse,
+  type GetAppInfo,
+  type UpdateSystemSettingResponse,
+} from "kintone-types";
 
 export default class kintoneApi {
   http: Axios;
@@ -83,6 +66,47 @@ export default class kintoneApi {
     const body = {
       jsScope,
       jsFiles,
+    };
+    return this.http.post(url, body);
+  }
+
+  //更新系统设置
+  getAppInfo(appid: string): Promise<GetAppInfo> {
+    const url = `/k/v1/app.json?id=${appid}`;
+    return this.http.get(url);
+  }
+
+  //获取应用的自定义设置 todo 返回类型调整
+  getAppSetting(app: string): Promise<GetAppSettingResponse> {
+    const url = `/k/api/js/get.json`;
+    const body = {
+      app,
+    };
+    return this.http.post(url, body);
+  }
+
+  //更新应用自定义设置 todo 返回类型调整
+  updateAppSetting(
+    id: string,
+    jsScope: string,
+    jsFiles: Array<jsFiles>,
+    name: string
+  ): Promise<UpdateSystemSettingResponse> {
+    const url = "/k/api/dev/app/update.json";
+    const body = {
+      id,
+      jsScope,
+      jsFiles,
+      name,
+    };
+    return this.http.post(url, body);
+  }
+
+  //更新应用自定义设置 todo 返回类型调整
+  deploySetting(app: string): Promise<UpdateSystemSettingResponse> {
+    const url = "/k/api/dev/app/deploy.json";
+    const body = {
+      app,
     };
     return this.http.post(url, body);
   }

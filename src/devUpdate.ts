@@ -1,21 +1,12 @@
 import kintoneApi from "./kintoneApi";
-// import logger from "./logger";
 import path from "node:path";
 const devFileName = "kintone_module_hack.js";
-
-type Type = "DESKTOP" | "MOBILE" | "DESKTOP_CSS" | "MOBILE_CSS";
-type TypeInput = "DESKTOP" | "MOBILE";
-type JsList = {
-  DESKTOP: string[];
-  MOBILE: string[];
-  DESKTOP_CSS: string[];
-  MOBILE_CSS: string[];
-};
-type KintoneInfo = {
-  url: string;
-  username: string;
-  password: string;
-};
+import {
+  type Type,
+  type EnvSetting,
+  type TypeInput,
+  type JsList,
+} from "kintone-types";
 
 const urlPrefix = (url: string) => {
   if (
@@ -31,11 +22,16 @@ const urlPrefix = (url: string) => {
 
 //步骤：上传文件，获取系统设置，准备新的自定义文件列表，更新系统设置
 export default async function devUpdate(
-  kintoneInfo: KintoneInfo,
+  env: EnvSetting,
   fileList: Array<string>,
   type: TypeInput
 ) {
-  const { url, username, password } = kintoneInfo;
+  const {
+    VITE_KINTONE_URL: url,
+    VITE_USER_NAME: username,
+    VITE_PASSWORD: password,
+    VITE_APP: app,
+  } = env;
   const k = new kintoneApi(urlPrefix(url), username, password);
   try {
     //上传文件
@@ -58,13 +54,26 @@ export default async function devUpdate(
       const { fileKey } = uploadPromise[index];
       const fileType: Type =
         path.extname(fileNameList[index]).slice(1) === "js"
-          ? type
-          : `${type}_CSS`;
+          ? type.type
+          : `${type.type}_CSS`;
       jsList[fileType].push(fileKey);
     }
     //获取自定义设置
-    const systemSetting = await k.getSystemSetting();
-    const { scripts, scope } = systemSetting.result;
+    let customSetting;
+    let appName = "";
+
+    if (type.platform === "PORTAL") {
+      customSetting = await k.getSystemSetting();
+    } else if (app) {
+      const result = await k.getAppInfo(app);
+      appName = result.name;
+      customSetting = await k.getAppSetting(app);
+    } else {
+      console.log("env setting error");
+      return;
+    }
+
+    const { scripts, scope } = customSetting.result;
 
     //补充之前的自定义配置，排除老的构建文件
     scripts.forEach((setting) => {
@@ -84,10 +93,16 @@ export default async function devUpdate(
       { jsType: "DESKTOP_CSS", fileKeys: jsList["DESKTOP_CSS"] },
       { jsType: "MOBILE_CSS", fileKeys: jsList["MOBILE_CSS"] },
     ];
+
     //更新系统设置
-    await k.updateSystemSetting(scope, jsFiles);
-    // return logger.info("file update success");
+    if (type.platform === "PORTAL") {
+      await k.updateSystemSetting(scope, jsFiles);
+    } else if (app) {
+      await k.updateAppSetting(app, scope, jsFiles, appName);
+      await k.deploySetting(app);
+    }
+    console.log("update success");
   } catch (err) {
-    // return logger.info(err as string);
+    console.log(err);
   }
 }

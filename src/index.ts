@@ -1,20 +1,25 @@
-import type { Plugin, ResolvedConfig } from "vite";
+import { ResolvedConfig, type Plugin, loadEnv, normalizePath } from "vite";
 import devUpdate from "./devUpdate";
 import path from "node:path";
 import fs from "node:fs";
 import { load } from "cheerio";
 const fileName = "kintone_module_hack.js";
+import {
+  type EnvSetting,
+  type TypeInput,
+  type ScriptList,
+} from "kintone-types";
 
-type Type = "DESKTOP" | "MOBILE";
-type KintoneInfo = {
-  url: string;
-  username: string;
-  password: string;
-};
-type ScriptList = {
-  type: string | undefined;
-  src: string | undefined;
-}[];
+//类型守卫函数
+function isEnvSetting(obj: any): obj is EnvSetting {
+  return (
+    obj &&
+    typeof obj.VITE_KINTONE_URL === "string" &&
+    typeof obj.VITE_USER_NAME === "string" &&
+    typeof obj.VITE_PASSWORD === "string" &&
+    (typeof obj.VITE_APP === "undefined" || typeof obj.VITE_APP === "string")
+  );
+}
 
 const getIndexHtmlContent = () => {
   const url = path.resolve("index.html");
@@ -33,6 +38,7 @@ const getIndexHtmlContent = () => {
   });
   return scriptList;
 };
+
 const kintoneModuleHack = (devServerUrl: string, scriptList: ScriptList) => {
   return `(function () {
     const scriptList = ${JSON.stringify(scriptList)};
@@ -65,11 +71,20 @@ const getDirFiles = (dir: string, extList: string[]) => {
   return result;
 };
 
-export default function kintoneDev(
-  kintoneInfo: KintoneInfo,
-  type: Type
-): Plugin[] {
+export default function kintoneDev(inputType: TypeInput): Plugin[] {
   let viteConfig: ResolvedConfig;
+  const validateEnv = (viteConfig: ResolvedConfig): EnvSetting | undefined => {
+    const resolvedRoot = normalizePath(
+      viteConfig.root ? path.resolve(viteConfig.root) : process.cwd()
+    );
+
+    const envDir = viteConfig.envDir
+      ? normalizePath(path.resolve(resolvedRoot, viteConfig.envDir))
+      : resolvedRoot;
+
+    const env = loadEnv("", envDir, viteConfig.envPrefix);
+    return isEnvSetting(env) ? env : undefined;
+  };
   return [
     {
       name: "vite-plugin-kintone-dev:dev",
@@ -101,10 +116,16 @@ export default function kintoneDev(
             fileUrl,
             kintoneModuleHack(devServerUrl, scriptList)
           );
-          //这个文件直接替换？应该没有人用相同名字
-          devUpdate(kintoneInfo, [fileUrl], type).then((r) => {
-            fs.unlinkSync(fileUrl);
-          });
+
+          const env = validateEnv(viteConfig);
+
+          if (env) {
+            devUpdate(env, [fileUrl], inputType).then((r) => {
+              fs.unlinkSync(fileUrl);
+            });
+          } else {
+            console.log("env error");
+          }
         });
       },
     },
@@ -129,7 +150,12 @@ export default function kintoneDev(
         const outputDir = path.resolve(viteConfig.build.outDir);
         const extList = ["js", "css"];
         const fileList = getDirFiles(outputDir, extList);
-        devUpdate(kintoneInfo, fileList, type);
+        const env = validateEnv(viteConfig);
+        if (env) {
+          devUpdate(env, fileList, inputType);
+        } else {
+          console.log("env error");
+        }
       },
     },
   ];
