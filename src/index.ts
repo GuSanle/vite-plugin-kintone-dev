@@ -15,9 +15,10 @@ function isEnvSetting(obj: any): obj is EnvSetting {
   return (
     obj &&
     typeof obj.VITE_KINTONE_URL === "string" &&
-    typeof obj.VITE_USER_NAME === "string" &&
-    typeof obj.VITE_PASSWORD === "string" &&
-    (typeof obj.VITE_APP === "undefined" || typeof obj.VITE_APP === "string")
+    typeof obj.VITE_KINTONE_USER_NAME === "string" &&
+    typeof obj.VITE_KINTONE_PASSWORD === "string" &&
+    (typeof obj.VITE_KINTONE_APP === "undefined" ||
+      typeof obj.VITE_KINTONE_APP === "string")
   );
 }
 

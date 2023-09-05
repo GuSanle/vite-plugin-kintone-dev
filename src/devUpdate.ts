@@ -28,9 +28,9 @@ export default async function devUpdate(
 ) {
   const {
     VITE_KINTONE_URL: url,
-    VITE_USER_NAME: username,
-    VITE_PASSWORD: password,
-    VITE_APP: app,
+    VITE_KINTONE_USER_NAME: username,
+    VITE_KINTONE_PASSWORD: password,
+    VITE_KINTONE_APP: app,
   } = env;
   const k = new kintoneApi(urlPrefix(url), username, password);
   try {

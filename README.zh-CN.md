@@ -41,10 +41,10 @@ env文件的设置模版
 .env
 ```sh
 VITE_KINTONE_URL=a.cybozu.com
-VITE_USER_NAME=a
-VITE_PASSWORD=a
+VITE_KINTONE_USER_NAME=a
+VITE_KINTONE_PASSWORD=a
 ## 如果你是应用的开发，请设置应用id
-VITE_APP=1
+VITE_KINTONE_APP=1
 ```
 
 

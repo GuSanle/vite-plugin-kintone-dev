@@ -15,9 +15,9 @@ declare module "kintone-types" {
 
   export interface EnvSetting {
     VITE_KINTONE_URL: string;
-    VITE_USER_NAME: string;
-    VITE_PASSWORD: string;
-    VITE_APP: string | undefined;
+    VITE_KINTONE_USER_NAME: string;
+    VITE_KINTONE_PASSWORD: string;
+    VITE_KINTONE_APP: string | undefined;
   }
 
   export interface UploadFileResponse {
