@@ -7,9 +7,9 @@ npm create vue@latest
 ```
 
 ## Project setup
-1 Add the "vite-plugin-kintone-dev" plugin.
-2 Add .env file
-3 You can add the "unplugin-icons plugin" to resolve the issue of ESM image path calls during development. For details, please refer to [unplugin-icons](https://github.com/unplugin/unplugin-icons)官网。
+1 Add the "vite-plugin-kintone-dev" plugin.   
+2 Add .env file    
+3 You can add the "unplugin-icons plugin" to resolve the issue of ESM image path calls during development.   For details, please refer to [unplugin-icons](https://github.com/unplugin/unplugin-icons)官网。
 
 ## Project run
 ```
