@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-kintone-dev",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "description": "vite plugin for developement kintone",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
