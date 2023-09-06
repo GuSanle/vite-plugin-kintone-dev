@@ -46,7 +46,11 @@ VITE_KINTONE_APP=1
 ```
 
 ## Example
-kintone + vue example: [vue3-porject-kintone-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/vue3-porject-kintone-demo)
+kintone + vue + vite   
+example: [vue-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/vue-kintone-vite-demo)
+
+kintone + react + vite   
+example: [react-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/react-kintone-vite-demo)
 
 
 

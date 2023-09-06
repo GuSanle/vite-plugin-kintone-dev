@@ -1,4 +1,4 @@
-# vue3-porject-kintone-demo
+# vue3-kintone-vite-demo
 
 This demo was built using create-vue. 
 Please refer to [create-vue](https://cn.vuejs.org/guide/quick-start.html#creating-a-vue-application)
