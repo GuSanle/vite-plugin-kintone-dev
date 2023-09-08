@@ -1,4 +1,10 @@
-import { ResolvedConfig, type Plugin, loadEnv, normalizePath } from "vite";
+import {
+  ResolvedConfig,
+  type Plugin,
+  loadEnv,
+  normalizePath,
+  ConfigEnv,
+} from "vite";
 import { devUpdate, devFileName } from "./devUpdate";
 import path from "node:path";
 import fs from "node:fs";
@@ -59,7 +65,7 @@ function kintoneModuleHack(
   `;
 }
 
-const getDirFiles = (dir: string, extList: string[]) => {
+function getDirFiles(dir: string, extList: string[]) {
   let result: string[] = [];
   let files = fs.readdirSync(dir, { withFileTypes: true });
   files.forEach((file) => {
@@ -72,27 +78,34 @@ const getDirFiles = (dir: string, extList: string[]) => {
     }
   });
   return result;
-};
+}
+
+function validateEnv(
+  envConfig: ConfigEnv,
+  viteConfig: ResolvedConfig
+): EnvSetting | undefined {
+  const resolvedRoot = normalizePath(
+    viteConfig.root ? path.resolve(viteConfig.root) : process.cwd()
+  );
+
+  const envDir = viteConfig.envDir
+    ? normalizePath(path.resolve(resolvedRoot, viteConfig.envDir))
+    : resolvedRoot;
+
+  const env = loadEnv(envConfig.mode, envDir, viteConfig.envPrefix);
+  return isEnvSetting(env) ? env : undefined;
+}
 
 export default function kintoneDev(inputType: TypeInput): Plugin[] {
   let viteConfig: ResolvedConfig;
-  const validateEnv = (viteConfig: ResolvedConfig): EnvSetting | undefined => {
-    const resolvedRoot = normalizePath(
-      viteConfig.root ? path.resolve(viteConfig.root) : process.cwd()
-    );
+  let envConfig: ConfigEnv;
 
-    const envDir = viteConfig.envDir
-      ? normalizePath(path.resolve(resolvedRoot, viteConfig.envDir))
-      : resolvedRoot;
-
-    const env = loadEnv("", envDir, viteConfig.envPrefix);
-    return isEnvSetting(env) ? env : undefined;
-  };
   return [
     {
       name: "vite-plugin-kintone-dev:dev",
       apply: "serve",
       enforce: "post", // 指定运行顺序
+      config: (config, env) => (envConfig = env),
       configResolved(config) {
         viteConfig = config;
       },
@@ -120,7 +133,7 @@ export default function kintoneDev(inputType: TypeInput): Plugin[] {
             kintoneModuleHack(devServerUrl, scriptList)
           );
 
-          const env = validateEnv(viteConfig);
+          const env = validateEnv(envConfig, viteConfig);
 
           if (env) {
             devUpdate(env, [fileUrl], inputType).then((r) => {
@@ -136,16 +149,17 @@ export default function kintoneDev(inputType: TypeInput): Plugin[] {
       name: "vite-plugin-kintone-dev:build",
       apply: "build",
       enforce: "post",
-      config: () => ({
-        build: {
+      config(config, env) {
+        envConfig = env;
+        config.build = {
           cssCodeSplit: false,
           rollupOptions: {
             output: {
               format: "iife",
             },
           },
-        },
-      }),
+        };
+      },
       configResolved(config) {
         viteConfig = config;
       },
@@ -153,7 +167,7 @@ export default function kintoneDev(inputType: TypeInput): Plugin[] {
         const outputDir = path.resolve(viteConfig.build.outDir);
         const extList = ["js", "css"];
         const fileList = getDirFiles(outputDir, extList);
-        const env = validateEnv(viteConfig);
+        const env = validateEnv(envConfig, viteConfig);
         if (env) {
           devUpdate(env, fileList, inputType);
         } else {

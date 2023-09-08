@@ -46,11 +46,10 @@ export default defineConfig({
   ],
 });
 ```
-
-:::note info
+   
 vite dev启动后，会在kintone的自定义设置页面自动上传“kintone_module_hack.js”脚本。
 vite build时，会删除这段js脚本。并生成build后的js文件。
-:::
+
 
 ## Example
 kintone + vue + vite   

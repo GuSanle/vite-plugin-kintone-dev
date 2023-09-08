@@ -44,9 +44,9 @@ export default defineConfig({
   ],
 });
 ```
-:::note info
+    
 After launching vite dev the 'kintone_module_hack.js' script will be automatically uploaded to the custom settings page of kintone. During vite build, this JavaScript script will be deleted, and the post-build JS file will be generated
-:::
+
 
 ## Example
 kintone + vue + vite   
