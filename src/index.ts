@@ -1,9 +1,8 @@
 import { ResolvedConfig, type Plugin, loadEnv, normalizePath } from "vite";
-import devUpdate from "./devUpdate";
+import { devUpdate, devFileName } from "./devUpdate";
 import path from "node:path";
 import fs from "node:fs";
 import { load } from "cheerio";
-const fileName = "kintone_module_hack.js";
 import {
   type EnvSetting,
   type TypeInput,
@@ -22,7 +21,7 @@ function isEnvSetting(obj: any): obj is EnvSetting {
   );
 }
 
-const getIndexHtmlContent = () => {
+function getIndexHtmlContent(): ScriptList {
   const url = path.resolve("index.html");
   const htmlContent = fs.readFileSync(url, "utf-8");
 
@@ -38,9 +37,12 @@ const getIndexHtmlContent = () => {
     scriptList.push(data);
   });
   return scriptList;
-};
+}
 
-const kintoneModuleHack = (devServerUrl: string, scriptList: ScriptList) => {
+function kintoneModuleHack(
+  devServerUrl: string,
+  scriptList: ScriptList
+): string {
   return `(function () {
     const scriptList = ${JSON.stringify(scriptList)};
     function loadScript(src,type) {
@@ -55,7 +57,7 @@ const kintoneModuleHack = (devServerUrl: string, scriptList: ScriptList) => {
     }
   })();
   `;
-};
+}
 
 const getDirFiles = (dir: string, extList: string[]) => {
   let result: string[] = [];
@@ -109,7 +111,7 @@ export default function kintoneDev(inputType: TypeInput): Plugin[] {
           if (!fs.existsSync(outputDir)) {
             fs.mkdirSync(outputDir);
           }
-          const fileUrl = path.resolve(outputDir, fileName);
+          const fileUrl = path.resolve(outputDir, devFileName);
 
           const scriptList = getIndexHtmlContent();
 

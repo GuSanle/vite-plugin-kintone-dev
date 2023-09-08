@@ -1,6 +1,6 @@
 import kintoneApi from "./kintoneApi";
 import path from "node:path";
-const devFileName = "kintone_module_hack.js";
+
 import {
   type Type,
   type EnvSetting,
@@ -8,7 +8,9 @@ import {
   type JsList,
 } from "kintone-types";
 
-const urlPrefix = (url: string) => {
+export const devFileName = "kintone_module_hack.js";
+
+function urlPrefix(url: string) {
   if (
     url.substring(0, 7).toLowerCase() == "http://" ||
     url.substring(0, 8).toLowerCase() == "https://"
@@ -18,14 +20,14 @@ const urlPrefix = (url: string) => {
     url = "https://" + url;
   }
   return url;
-};
+}
 
 //步骤：上传文件，获取系统设置，准备新的自定义文件列表，更新系统设置
-export default async function devUpdate(
+export const devUpdate = async (
   env: EnvSetting,
   fileList: Array<string>,
   type: TypeInput
-) {
+) => {
   const {
     VITE_KINTONE_URL: url,
     VITE_KINTONE_USER_NAME: username,
@@ -105,4 +107,4 @@ export default async function devUpdate(
   } catch (err) {
     console.log(err);
   }
-}
+};

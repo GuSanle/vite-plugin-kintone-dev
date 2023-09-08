@@ -16,6 +16,16 @@ yarn add -D vite-plugin-kintone-dev
 npm i -D vite-plugin-kintone-dev
 ```
 
+## Configuration
+setting the .env (sample)
+```sh
+VITE_KINTONE_URL=a.cybozu.com
+VITE_KINTONE_USER_NAME=a
+VITE_KINTONE_PASSWORD=a
+## if you are developing in "app", please set the VITE_KINTONE_APP
+VITE_KINTONE_APP=1
+```
+
 ## Usage
 
 ```ts
@@ -34,16 +44,9 @@ export default defineConfig({
   ],
 });
 ```
-
-## Configuration
-setting the .env (sample)
-```sh
-VITE_KINTONE_URL=a.cybozu.com
-VITE_KINTONE_USER_NAME=a
-VITE_KINTONE_PASSWORD=a
-## if you are developing in "app", please set the VITE_APP
-VITE_KINTONE_APP=1
-```
+:::note info
+After launching vite dev the 'kintone_module_hack.js' script will be automatically uploaded to the custom settings page of kintone. During vite build, this JavaScript script will be deleted, and the post-build JS file will be generated
+:::
 
 ## Example
 kintone + vue + vite   

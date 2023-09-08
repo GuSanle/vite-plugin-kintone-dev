@@ -17,6 +17,17 @@ yarn add -D vite-plugin-kintone-dev
 npm i -D vite-plugin-kintone-dev
 ```
 
+## Configuration
+env文件的设置模版
+.env
+```sh
+VITE_KINTONE_URL=a.cybozu.com
+VITE_KINTONE_USER_NAME=a
+VITE_KINTONE_PASSWORD=a
+## 如果你是应用的开发，请设置应用id
+VITE_KINTONE_APP=1
+```
+
 ## Usage
 
 ```ts
@@ -36,16 +47,10 @@ export default defineConfig({
 });
 ```
 
-## Configuration
-env文件的设置模版
-.env
-```sh
-VITE_KINTONE_URL=a.cybozu.com
-VITE_KINTONE_USER_NAME=a
-VITE_KINTONE_PASSWORD=a
-## 如果你是应用的开发，请设置应用id
-VITE_KINTONE_APP=1
-```
+:::note info
+vite dev启动后，会在kintone的自定义设置页面自动上传“kintone_module_hack.js”脚本。
+vite build时，会删除这段js脚本。并生成build后的js文件。
+:::
 
 ## Example
 kintone + vue + vite   
