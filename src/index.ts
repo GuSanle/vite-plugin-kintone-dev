@@ -96,6 +96,10 @@ function validateEnv(
   return isEnvSetting(env) ? env : undefined;
 }
 
+function isIpv6(address: any) {
+  return address.family === "IPv6" || address.family === 6;
+}
+
 export default function kintoneDev(inputType: TypeInput): Plugin[] {
   let viteConfig: ResolvedConfig;
   let envConfig: ConfigEnv;
@@ -110,7 +114,7 @@ export default function kintoneDev(inputType: TypeInput): Plugin[] {
         viteConfig = config;
       },
       configureServer(server) {
-        server.httpServer?.once("listening", () => {
+        server.httpServer?.once("listening", async () => {
           const outputDir = path.resolve(viteConfig.build.outDir);
           const address = server.httpServer?.address();
           if (!address || typeof address === "string") {
@@ -118,7 +122,9 @@ export default function kintoneDev(inputType: TypeInput): Plugin[] {
             process.exit(1);
           }
           const protocol = server.config.server.https ? "https" : "http";
-          const host = address.address;
+          const host = isIpv6(address)
+            ? `[${address.address}]`
+            : address.address;
           const port = address.port;
           const devServerUrl = `${protocol}://${host}:${port}`;
           if (!fs.existsSync(outputDir)) {
