@@ -22,6 +22,12 @@ export default defineConfig({
   //     input: "src/main.ts",
   //   },
   // },
+
+  build: {
+    rollupOptions: {
+      input: { mobile: "src/main.ts" },
+    },
+  },
   plugins: [
     vue(),
     kintoneDev({ platform: "PORTAL", type: "DESKTOP" }),

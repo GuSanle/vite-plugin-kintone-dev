@@ -165,6 +165,31 @@ export default function kintoneDev(inputType: TypeInput): Plugin[] {
       apply: "build",
       enforce: "post",
       config(config, env) {
+        let entry: string | string[] | { [entryAlias: string]: string } =
+          "src/main.ts";
+
+        // 如果设置了input，则使用设置的值（包括多入口）需要做window的路径判断
+        const possibleEntries = [
+          "src/main.ts",
+          "src/main.js",
+          "src/main.jsx",
+          "src/main.tsx",
+        ];
+
+        if (config.build?.rollupOptions?.input) {
+          entry = config.build.rollupOptions.input;
+        } else {
+          for (const possibleEntry of possibleEntries) {
+            const filePath = path.resolve(possibleEntry);
+            if (fs.existsSync(filePath)) {
+              entry = possibleEntry;
+              break;
+            }
+          }
+        }
+
+        console.log(`打包入口: ${JSON.stringify(entry)}`);
+
         envConfig = env;
         config.build = {
           modulePreload: { polyfill: false },
@@ -172,6 +197,7 @@ export default function kintoneDev(inputType: TypeInput): Plugin[] {
           manifest: true,
           cssCodeSplit: false,
           rollupOptions: {
+            input: entry,
             output: {
               format: "iife",
             },
@@ -187,6 +213,7 @@ export default function kintoneDev(inputType: TypeInput): Plugin[] {
         const fileList = getDirFiles(outputDir, extList);
         const env = validateEnv(envConfig, viteConfig);
         if (env) {
+          //是否需要根据output name来判断是否进行上传？
           devUpdate(env, fileList, inputType);
         } else {
           console.log("env error");
