@@ -2,7 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 
-import svg from '@/assets/logo.svg'
+// import svg from '@/assets/logo.svg'
 import svgPlugin from '~icons/my-icons/logo.svg'
 // import logo from '@/assets/logo.svg'
 </script>
@@ -10,7 +10,7 @@ import svgPlugin from '~icons/my-icons/logo.svg'
 <template>
   <header>
     <div class="wrapper">
-      <img alt="svg" :src="svg" width="100">
+      <!-- <img alt="svg" :src="svg" width="100"> -->
       <svgPlugin alt="svgPlugin" width="100" />
 
       <HelloWorld msg="You did it!" />

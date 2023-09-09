@@ -9,7 +9,11 @@ npm create vue@latest
 ## Project setup
 1. Add the "vite-plugin-kintone-dev" plugin.   
 2. Add .env file    
-3. You can add the "unplugin-icons plugin" to resolve the issue of ESM image path calls during development.   For details, please refer to [unplugin-icons](https://github.com/unplugin/unplugin-icons)。
+3. Rollup doesn't have a loader like Webpack that allows you to inline assets resources.
+So, there may be cases where external resources need to be fetched after the build. It's recommended to use plugins to import small SVG resources and to import large image resources using external URLs.
+Plugin for SVG images:
+[unplugin-icons](https://github.com/unplugin/unplugin-icons)。
+
 
 ## Project run
 ```
