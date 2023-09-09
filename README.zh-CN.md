@@ -38,8 +38,8 @@ import kintoneDev from "vite-plugin-kintone-dev";
 
 export default defineConfig({
   plugins: [
-    //platform: "APP" | "PORTAL"   (首页自定义 or 应用自定义)
-    //type: "DESKTOP" | "MOBILE"   (PC端 or 移动端)
+    //platform: "APP" | "PORTAL"   (Portal or App)
+    //type: "DESKTOP" | "MOBILE"   (Desktop or Mobile)
     kintoneDev({platform: "APP", type: "DESKTOP"}),
   ],
 });
