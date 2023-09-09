@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
-import logo from '~icons/my-icons/logo.svg'
+
+import svg from '@/assets/logo.svg'
+import svgPlugin from '~icons/my-icons/logo.svg'
+// import logo from '@/assets/logo.svg'
 </script>
 
 <template>
   <header>
     <div class="wrapper">
-      <logo class="tabbar-icon" alt="Vue logo" width="125" height="125" />
+      <img alt="svg" :src="svg" width="100">
+      <svgPlugin alt="svgPlugin" width="100" />
+
       <HelloWorld msg="You did it!" />
       <nav>
         <RouterLink to="/">Home</RouterLink>

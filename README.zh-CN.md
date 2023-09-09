@@ -30,23 +30,38 @@ VITE_KINTONE_APP=1
 
 ## Usage
 
+### 必选参数
 ```ts
 // vite.config.ts
 import { defineConfig } from "vite";
 import kintoneDev from "vite-plugin-kintone-dev";
 
-//platform: "APP" | "PORTAL"   (首页自定义 or 应用自定义)
-//type: "DESKTOP" | "MOBILE"   (PC端 or 移动端)
 export default defineConfig({
   plugins: [
-    kintoneDev({platform: "APP",type: "DESKTOP"}),
-    // kintoneDev({platform: "APP";type: "MOBILE"}),
-    // kintoneDev({platform: "PORTAL";type: "DESKTOP"}),
-    // kintoneDev({platform: "PORTAL";type: "MOBILE"}),
+    //platform: "APP" | "PORTAL"   (首页自定义 or 应用自定义)
+    //type: "DESKTOP" | "MOBILE"   (PC端 or 移动端)
+    kintoneDev({platform: "APP", type: "DESKTOP"}),
   ],
 });
 ```
-   
+
+### 可选参数
+如果使用react，请加上react:true
+```ts
+kintoneDev({platform: "APP", type: "DESKTOP", react:true})
+```
+如果打包时，希望指定参数请加上build:{outputName:"xxx",upload:true}
+```ts
+kintoneDev({
+  platform: "APP",
+  type: "DESKTOP",
+  build:{
+    outputName:"mobile",
+    upload:true
+  }
+})
+```
+
 vite dev启动后，会在kintone的自定义设置页面自动上传“kintone_module_hack.js”脚本。
 vite build时，会删除这段js脚本。并生成build后的js文件。
 
