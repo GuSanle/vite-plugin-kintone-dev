@@ -1,6 +1,7 @@
 {
   "extends": "@tsconfig/node18/tsconfig.json",
   "include": [
+    "vite-plugin-kintone-dev/**/*",
     "vite.config.*",
     "vitest.config.*",
     "cypress.config.*",

@@ -54,14 +54,6 @@ function kintoneModuleHack(
     viteClientInject.type = "module";
     viteClientInject.src = "${devServerUrl}"+'/@vite/client';
     document.body.appendChild(viteClientInject);
-    const scriptElement = document.createElement("script");
-    scriptElement.type = "module";
-    scriptElement.textContent = \`import RefreshRuntime from '${devServerUrl}/@react-refresh';
-    RefreshRuntime.injectIntoGlobalHook(window);
-    window.$RefreshReg$ = () => {};
-    window.$RefreshSig$ = () => (type) => type;
-    window.__vite_plugin_react_preamble_installed__ = true;\`;
-    document.body.appendChild(scriptElement);
     const scriptList = ${JSON.stringify(scriptList)};
     function loadScript(src,type) {
       const script = document.createElement("script");
@@ -124,8 +116,7 @@ export default function kintoneDev(inputType: TypeInput): Plugin[] {
       config: (config, env) => (envConfig = env),
       configResolved(config) {
         viteConfig = config;
-        console.log(viteConfig.server);
-        viteConfig.server.origin = "http://127.0.0.1:8080";
+        // viteConfig.server.origin = "http://localhost:5173";
       },
       configureServer(server) {
         // console.log("server", server);
@@ -142,7 +133,9 @@ export default function kintoneDev(inputType: TypeInput): Plugin[] {
             : address.address;
           const port = address.port;
           const devServerUrl = `${protocol}://${host}:${port}`;
-          // server.origin = devServerUrl;
+          if (!server.config.server.origin) {
+            server.config.server.origin = `${protocol}://${host}:${port}`;
+          }
           if (!fs.existsSync(outputDir)) {
             fs.mkdirSync(outputDir);
           }
@@ -174,6 +167,9 @@ export default function kintoneDev(inputType: TypeInput): Plugin[] {
       config(config, env) {
         envConfig = env;
         config.build = {
+          modulePreload: { polyfill: false },
+          // 在 outDir 中生成 manifest.json
+          manifest: true,
           cssCodeSplit: false,
           rollupOptions: {
             output: {
