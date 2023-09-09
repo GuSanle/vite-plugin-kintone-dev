@@ -28,21 +28,35 @@ VITE_KINTONE_APP=1
 
 ## Usage
 
+### Required Parameters
 ```ts
 // vite.config.ts
 import { defineConfig } from "vite";
 import kintoneDev from "vite-plugin-kintone-dev";
 
-//platform: "APP" | "PORTAL"   (Portal Customize or Application Customize)
-//type: "DESKTOP" | "MOBILE"   (on Desktop or on Mobile)
 export default defineConfig({
   plugins: [
-    kintoneDev({platform: "APP",type: "DESKTOP"}),
-    // kintoneDev({platform: "APP";type: "MOBILE"}),
-    // kintoneDev({platform: "PORTAL";type: "DESKTOP"}),
-    // kintoneDev({platform: "PORTAL";type: "MOBILE"}),
+    //platform: "APP" | "PORTAL"   (首页自定义 or 应用自定义)
+    //type: "DESKTOP" | "MOBILE"   (PC端 or 移动端)
+    kintoneDev({platform: "APP", type: "DESKTOP"}),
   ],
 });
+```
+### Optional Parameters
+If using React, please add react: true.
+```ts
+kintoneDev({platform: "APP", type: "DESKTOP", react:true})
+```
+If you want to specify parameters during the build, please add build: { outputName: "xxx", upload: true }.
+```ts
+kintoneDev({
+  platform: "APP",
+  type: "DESKTOP",
+  build:{
+    outputName:"mobile",
+    upload:true
+  }
+})
 ```
     
 After launching vite dev the 'kintone_module_hack.js' script will be automatically uploaded to the custom settings page of kintone. During vite build, this JavaScript script will be deleted, and the post-build JS file will be generated

@@ -4,6 +4,11 @@ declare module "kintone-types" {
   export type TypeInput = {
     platform: "APP" | "PORTAL";
     type: "DESKTOP" | "MOBILE";
+    react?: boolean;
+    build?: {
+      outputName: string;
+      upload: boolean;
+    };
   };
 
   export interface JsList {
