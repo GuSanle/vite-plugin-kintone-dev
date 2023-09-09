@@ -7,4 +7,4 @@ kintone.events.on("portal.show", (event) => {
   ReactDOM.createRoot(kintone.portal.getContentSpaceElement()!).render(<App />);
   return event;
 });
-// ReactDOM.createRoot(document.getElementById("root")!).render(<App />);
+
