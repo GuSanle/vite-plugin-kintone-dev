@@ -40,7 +40,7 @@ export default defineConfig({
   plugins: [
     //platform: "APP" | "PORTAL"   (Portal or App)
     //type: "DESKTOP" | "MOBILE"   (Desktop or Mobile)
-    kintoneDev({platform: "APP", type: "DESKTOP"}),
+    kintoneDev({platform: "PORTAL", type: "DESKTOP"}),
   ],
 });
 ```
@@ -48,12 +48,12 @@ export default defineConfig({
 ### 可选参数
 如果使用react，请加上react:true
 ```ts
-kintoneDev({platform: "APP", type: "DESKTOP", react:true})
+kintoneDev({platform: "PORTAL", type: "DESKTOP", react:true})
 ```
 如果打包时，希望指定参数请加上build:{outputName:"xxx",upload:true}
 ```ts
 kintoneDev({
-  platform: "APP",
+  platform: "PORTAL",
   type: "DESKTOP",
   build:{
     outputName:"mobile",

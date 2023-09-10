@@ -37,19 +37,19 @@ export default defineConfig({
   plugins: [
     //platform: "APP" | "PORTAL"   (Portal or App)
     //type: "DESKTOP" | "MOBILE"   (Desktop or Mobile)
-    kintoneDev({platform: "APP", type: "DESKTOP"}),
+    kintoneDev({platform: "PORTAL", type: "DESKTOP"}),
   ],
 });
 ```
 ### オプションのパラメータ
 Reactを使用する場合、react: trueを追加してください。
 ```ts
-kintoneDev({platform: "APP", type: "DESKTOP", react:true})
+kintoneDev({platform: "PORTAL", type: "DESKTOP", react:true})
 ```
 ビルド時にパラメータを指定したい場合、build: { outputName: "xxx", upload: true }を追加してください。
 ```ts
 kintoneDev({
-  platform: "APP",
+  platform: "PORTAL",
   type: "DESKTOP",
   build:{
     outputName:"mobile",
