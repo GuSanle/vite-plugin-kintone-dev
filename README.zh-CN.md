@@ -74,7 +74,7 @@ kintone + react + vite
 example: [react-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/react-kintone-vite-demo)
 
 ## Note
-受制于kintone的事件注册时机问题。[事件句柄的注册时机](https://cybozudev.kf5.com/hc/kb/article/1434396) 以下事件不适合使用vite进行开发。
+受制于kintone的事件注册时机问题。[事件句柄的注册时机](https://cybozudev.kf5.com/hc/kb/article/1434396) 以下事件不适合使用vite进行开发。但是使用vite构建没有问题。
 app.record.create.show   
 app.record.edit.show   
 app.record.detail.show   
