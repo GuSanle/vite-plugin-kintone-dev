@@ -68,4 +68,8 @@ example: [vue-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-
 kintone + react + vite   
 example: [react-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/react-kintone-vite-demo)
 
-
+## Note
+Kintoneのイベント登録のタイミングの問題により、[イベントハンドラー登録の適切なタイミングについて](https://cybozudev.zendesk.com/hc/ja/articles/360000882123) 以下のイベントはViteを使用した開発に適していません。
+app.record.create.show   
+app.record.edit.show   
+app.record.detail.show  
