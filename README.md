@@ -7,6 +7,12 @@ English | [日本語](https://github.com/GuSanle/vite-plugin-kintone-dev/blob/ma
 
 This is a Vite plugin that allows you to develop for kintone using Vite. We know that Vite uses ESM for module loading, but when uploading custom JavaScript to kintone, you cannot specify the use of ESM for loading. With this plugin, you can use ESM module loading for your code during local development, enabling Vite builds. With HMR, your development experience will be as fast as lightning.
 
+## Disclaimer
+
+このOSSは、私個人の著作物であり、サイボウズ株式会社、その他、私の所属する組織とは一切関係ありません。
+ 
+This OSS is my own personal work and does not have any relationship with Cybozu Inc. or any other organization which I belong to.
+
 ## Install
 
 ```sh

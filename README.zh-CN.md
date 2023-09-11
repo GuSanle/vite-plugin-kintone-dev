@@ -8,6 +8,12 @@
 
 这是一个vite插件，让你可以使用vite来进行kintone开发。我们知道vite使用esm来进行模块加载，而kintone上传自定义js时无法指定使用esm来加载。通过这个插件，能让你在本地开发时使用esm模块加载你的代码，实现vite构建。通过hmr，让你的开发体验快如闪电。
 
+## Disclaimer
+
+このOSSは、私個人の著作物であり、サイボウズ株式会社、その他、私の所属する組織とは一切関係ありません。
+ 
+This OSS is my own personal work and does not have any relationship with Cybozu Inc. or any other organization which I belong to.
+
 ## Install
 
 ```sh
