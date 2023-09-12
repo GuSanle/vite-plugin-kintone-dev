@@ -75,11 +75,7 @@ example: [vue-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-
 kintone + react + vite   
 example: [react-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/react-kintone-vite-demo)
 
-## Note
-Due to issues with the event registration timing in Kintone. [イベントハンドラー登録の適切なタイミングについて](https://cybozudev.zendesk.com/hc/ja/articles/360000882123) The following events are not suitable for development using Vite.But there is no issue with building using Vite.
-app.record.create.show   
-app.record.edit.show   
-app.record.detail.show  
+
 
 
 

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 
 // import svg from '@/assets/logo.svg'
 import svgPlugin from '~icons/my-icons/logo.svg'
+import TheWelcome from './components/TheWelcome.vue';
 // import logo from '@/assets/logo.svg'
 </script>
 
@@ -12,16 +12,10 @@ import svgPlugin from '~icons/my-icons/logo.svg'
     <div class="wrapper">
       <!-- <img alt="svg" :src="svg" width="100"> -->
       <svgPlugin alt="svgPlugin" width="100" />
-
       <HelloWorld msg="You did it!" />
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+      <TheWelcome />
     </div>
   </header>
-
-  <RouterView />
 </template>
 
 <style scoped>

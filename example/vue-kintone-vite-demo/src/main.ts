@@ -2,11 +2,15 @@
 
 import { createApp } from "vue";
 import App from "./App.vue";
-import router from "./router";
 
 kintone.events.on("portal.show", (event) => {
   const app = createApp(App);
-  app.use(router);
   app.mount(kintone.portal.getContentSpaceElement()!);
   return event;
 });
+
+// kintone.events.on("app.record.detail.show", (event) => {
+//   const app = createApp(App);
+//   app.mount(kintone.app.record.getHeaderMenuSpaceElement()!);
+//   return event;
+// });

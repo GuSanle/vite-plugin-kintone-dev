@@ -8,3 +8,7 @@ kintone.events.on("portal.show", (event) => {
   return event;
 });
 
+// kintone.events.on("app.record.detail.show", (event) => {
+//   ReactDOM.createRoot(kintone.app.record.getHeaderMenuSpaceElement()!).render(<App />);
+//   return event;
+// });
