@@ -5,7 +5,7 @@ const questions = [
     type: "input",
     message: "Please enter kintone url",
     name: "kintoneUrl",
-    default: "(example:aaa.cybozu.com)",
+    default: "aaa.cybozu.com",
   },
   {
     type: "input",
