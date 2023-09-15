@@ -8,7 +8,7 @@ import {
   type JsList,
 } from "kintone-types";
 
-export const devFileName = "kintone_module_hack.js";
+export const devFileName = "vite_plugin_kintone_dev_module_hack.js";
 
 function urlPrefix(url: string) {
   if (
@@ -22,12 +22,39 @@ function urlPrefix(url: string) {
   return url;
 }
 
+function checkEnvType(env: any) {
+  // 使用类型断言
+  const myEnv = env as Partial<EnvSetting>;
+
+  // 检查必需的环境变量
+  if (
+    typeof myEnv.VITE_KINTONE_URL !== "string" ||
+    typeof myEnv.VITE_KINTONE_USER_NAME !== "string" ||
+    typeof myEnv.VITE_KINTONE_PASSWORD !== "string"
+  ) {
+    return false;
+  }
+
+  // 检查可选的环境变量
+  if (
+    myEnv.VITE_KINTONE_APP !== undefined &&
+    typeof myEnv.VITE_KINTONE_APP !== "string"
+  ) {
+    return false;
+  }
+  return true;
+}
+
 //步骤：上传文件，获取系统设置，准备新的自定义文件列表，更新系统设置
 export const devUpdate = async (
-  env: EnvSetting,
+  env: any,
   fileList: Array<string>,
   type: TypeInput
 ) => {
+  if (!checkEnvType(env)) {
+    console.log("env error");
+    return;
+  }
   const {
     VITE_KINTONE_URL: url,
     VITE_KINTONE_USER_NAME: username,
@@ -104,7 +131,7 @@ export const devUpdate = async (
       await k.deploySetting(app);
     }
     console.log("update success");
-  } catch (err) {
-    console.log(err);
+  } catch (err: any) {
+    console.log("upload failed!" + err.message);
   }
 };

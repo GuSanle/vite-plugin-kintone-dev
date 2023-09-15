@@ -24,8 +24,10 @@ npm i -D vite-plugin-kintone-dev
 ```
 
 ## Configuration
-env文件的设置模版
-.env
+第一次启动时，会自动检查你的env文件的设置模版。如果没有配置，会启动命令行交互，让你输入配置信息。同时自动更新你的env文件。   
+（serve模式下为".env.development"文件, build模式下为".env.production"文件）  
+如果你的env文件设置有误，可以自行去修改。   
+.env.development
 ```sh
 VITE_KINTONE_URL=a.cybozu.com
 VITE_KINTONE_USER_NAME=a
@@ -68,7 +70,7 @@ kintoneDev({
 })
 ```
 
-vite dev启动后，会在kintone的自定义设置页面自动上传“kintone_module_hack.js”脚本。
+vite dev启动后，会在kintone的自定义设置页面自动上传“vite_plugin_kintone_dev_module_hack.js”脚本。
 vite build时，会删除这段js脚本。并生成build后的js文件。
 
 
@@ -78,6 +80,16 @@ example: [vue-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-
 
 kintone + react + vite   
 example: [react-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/react-kintone-vite-demo)
+
+## Note
+如果开发时遇到[事件句柄的注册时机](https://cybozudev.kf5.com/hc/kb/article/1434396) 问题，
+可以尝试使用如下代码解决问题。（构建时，可以删除，因为构建时，不再使用esm模式，不存在异步加载问题。）
+```ts
+const event = new Event("load");
+// @ts-ignore
+cybozu.eventTarget.dispatchEvent(event);
+```
+
 
 
 

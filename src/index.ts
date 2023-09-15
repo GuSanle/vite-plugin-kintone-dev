@@ -3,11 +3,11 @@ import { OutputOptions } from "rollup";
 import { devUpdate, devFileName } from "./devUpdate";
 import path from "node:path";
 import fs from "node:fs";
-import { type TypeInput } from "kintone-types";
+import type { TypeInput } from "kintone-types";
 import kintoneModuleInject from "./kintoneModuleInject";
 import getServerInfo from "./getServerInfo";
 import getIndexScripts from "./getIndexScripts";
-import getEnvInfo from "./getEnvInfo";
+import { validateEnv, checkEnv } from "./getEnvInfo";
 import getEntry from "./getEntry";
 import getDirFiles from "./getDirFiles";
 
@@ -21,7 +21,8 @@ export default function kintoneDev(options: TypeInput): Plugin[] {
       apply: "serve",
       enforce: "post",
       config: (config, env) => (envConfig = env),
-      configResolved(config) {
+      async configResolved(config) {
+        await checkEnv(envConfig, config);
         viteConfig = config;
       },
       configureServer(server) {
@@ -40,15 +41,11 @@ export default function kintoneDev(options: TypeInput): Plugin[] {
             fileUrl,
             kintoneModuleInject(devServerUrl, scriptList, options.react)
           );
-          const env = getEnvInfo(envConfig, viteConfig);
-          if (env) {
-            devUpdate(env, [fileUrl], options)
-              .then((r) => {
-                fs.unlinkSync(fileUrl);
-              })
-              .catch(() => {
-                console.log("upload failed");
-              });
+          const { isEnvOk, env } = validateEnv(envConfig, viteConfig);
+          if (isEnvOk) {
+            devUpdate(env, [fileUrl], options).then((r) => {
+              fs.unlinkSync(fileUrl);
+            });
           } else {
             console.log("env error");
           }
@@ -89,16 +86,16 @@ export default function kintoneDev(options: TypeInput): Plugin[] {
             };
         }
       },
-
-      configResolved(config) {
+      async configResolved(config) {
+        await checkEnv(envConfig, config);
         viteConfig = config;
       },
       async closeBundle() {
         const outputDir = path.resolve(viteConfig.build.outDir);
         const extList = ["js", "css"];
         const fileList = getDirFiles(outputDir, extList);
-        const env = getEnvInfo(envConfig, viteConfig);
-        if (env) {
+        const { isEnvOk, env } = validateEnv(envConfig, viteConfig);
+        if (isEnvOk) {
           //是否需要根据output name来判断是否进行上传？
           if (options.build?.upload) {
             devUpdate(env, fileList, options).catch(() => {

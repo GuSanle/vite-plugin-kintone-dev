@@ -14,3 +14,7 @@ kintone.events.on("portal.show", (event) => {
 //   app.mount(kintone.app.record.getHeaderMenuSpaceElement()!);
 //   return event;
 // });
+
+// const event = new Event("load");
+// // @ts-ignore
+// cybozu.eventTarget.dispatchEvent(event);

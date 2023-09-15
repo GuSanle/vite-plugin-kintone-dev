@@ -12,3 +12,7 @@ kintone.events.on("portal.show", (event) => {
 //   ReactDOM.createRoot(kintone.app.record.getHeaderMenuSpaceElement()!).render(<App />);
 //   return event;
 // });
+
+// const event = new Event("load");
+// // @ts-ignore
+// cybozu.eventTarget.dispatchEvent(event);

@@ -22,7 +22,7 @@ declare module "kintone-types" {
     VITE_KINTONE_URL: string;
     VITE_KINTONE_USER_NAME: string;
     VITE_KINTONE_PASSWORD: string;
-    VITE_KINTONE_APP: string | undefined;
+    VITE_KINTONE_APP?: string;
   }
 
   export interface UploadFileResponse {

@@ -22,6 +22,9 @@ yarn add -D vite-plugin-kintone-dev
 npm i -D vite-plugin-kintone-dev
 ```
 ## Configuration
+初回起動時に、自動的にenvファイルの設定テンプレートをチェックします。設定がない場合は、コマンドラインインタラクションを起動して設定情報を入力させ、自動的にenvファイルを更新します。   
+（serveモードでは ".env.development" ファイル、buildモードでは ".env.production" ファイル）   
+envファイルの設定が間違っている場合は、自分で修正することができます。    
 setting the .env (sample)
 ```sh
 VITE_KINTONE_URL=a.cybozu.com
@@ -64,7 +67,7 @@ kintoneDev({
 })
 ```
  
-'vite dev'を起動すると、'kintone_module_hack.js'スクリプトがKintoneのカスタム設定ページに自動アップロードされます。 'vite build'の際には、このJavaScriptスクリプトが削除され、ビルド後のJSファイルが生成されます。
+'vite dev'を起動すると、'vite_plugin_kintone_dev_module_hack.js'スクリプトがKintoneのカスタム設定ページに自動アップロードされます。 'vite build'の際には、このJavaScriptスクリプトが削除され、ビルド後のJSファイルが生成されます。
 
 
 ## Example
@@ -74,4 +77,10 @@ example: [vue-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-
 kintone + react + vite   
 example: [react-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/react-kintone-vite-demo)
 
-
+## Note
+開発中に [イベントハンドラー登録の適切なタイミングについて](https://cybozudev.zendesk.com/hc/ja/articles/360000882123)の問題に遭遇した場合、以下のコードを使用して問題を解決することができます。（ビルド時には、ESMモードはもう使用されないため、非同期ロードの問題は存在しないので、削除することができます。）
+```ts
+const event = new Event("load");
+// @ts-ignore
+cybozu.eventTarget.dispatchEvent(event);
+```

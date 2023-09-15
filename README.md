@@ -23,6 +23,9 @@ npm i -D vite-plugin-kintone-dev
 ```
 
 ## Configuration
+On the first launch, it will automatically check your env file's setting template. If it is not configured, it will start a command line interaction for you to enter configuration information, and automatically update your env file.    
+(In serve mode, it's the ".env.development" file, in build mode, it's the ".env.production" file)   
+If your env file settings are incorrect, you can modify them yourself.   
 setting the .env (sample)
 ```sh
 VITE_KINTONE_URL=a.cybozu.com
@@ -65,7 +68,7 @@ kintoneDev({
 })
 ```
     
-After launching vite dev the 'kintone_module_hack.js' script will be automatically uploaded to the custom settings page of kintone. During vite build, this JavaScript script will be deleted, and the post-build JS file will be generated
+After launching vite dev the 'vite_plugin_kintone_dev_module_hack.js' script will be automatically uploaded to the custom settings page of kintone. During vite build, this JavaScript script will be deleted, and the post-build JS file will be generated
 
 
 ## Example
@@ -75,7 +78,13 @@ example: [vue-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-
 kintone + react + vite   
 example: [react-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/react-kintone-vite-demo)
 
-
+## Note
+If you encounter the  issue [イベントハンドラー登録の適切なタイミングについて](https://cybozudev.zendesk.com/hc/ja/articles/360000882123) during development, you can try to solve the problem with the following code. (You can delete it during the build, because the esm mode is no longer used during the build, and there is no asynchronous loading problem.)
+```ts
+const event = new Event("load");
+// @ts-ignore
+cybozu.eventTarget.dispatchEvent(event);
+```
 
 
 
