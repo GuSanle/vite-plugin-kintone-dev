@@ -31,6 +31,8 @@ setting the .env (sample)
 VITE_KINTONE_URL=a.cybozu.com
 VITE_KINTONE_USER_NAME=a
 VITE_KINTONE_PASSWORD=a
+VITE_KINTONE_PLATFORM=
+VITE_KINTONE_TYPE=
 ## if you are developing in "app", please set the VITE_KINTONE_APP
 VITE_KINTONE_APP=1
 ```
@@ -45,16 +47,14 @@ import kintoneDev from "vite-plugin-kintone-dev";
 
 export default defineConfig({
   plugins: [
-    //platform: "APP" | "PORTAL"   (Portal or App)
-    //type: "DESKTOP" | "MOBILE"   (Desktop or Mobile)
-    kintoneDev({platform: "PORTAL", type: "DESKTOP"}),
+    kintoneDev(),
   ],
 });
 ```
 ### Optional Parameters
 If using React, please add react: true.
 ```ts
-kintoneDev({platform: "PORTAL", type: "DESKTOP", react:true})
+kintoneDev({react:true})
 ```
 If you want to specify parameters during the build, please add build: { outputName: "xxx", upload: true }.
 ```ts
@@ -78,9 +78,22 @@ example: [vue-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-
 kintone + react + vite   
 example: [react-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/react-kintone-vite-demo)
 
-## Note
-If you encounter the  issue [イベントハンドラー登録の適切なタイミングについて](https://cybozudev.zendesk.com/hc/ja/articles/360000882123) during development, you can try to solve the problem with the following code. (You can delete it during the build, because the esm mode is no longer used during the build, and there is no asynchronous loading problem.)
+## Note   
+If you encounter the issue of [イベントハンドラー登録の適切なタイミングについて](https://cybozudev.zendesk.com/hc/ja/articles/360000882123) during development,you can try to solve the problem by using the following code after mounting after using the kintone event.   
+(During the build, it can be deleted, because the esm mode is no longer used during the build, there is no asynchronous loading problem.)   
+Example of src/main.ts:   
+
 ```ts
+import { createApp } from "vue";
+import App from "./App.vue";
+
+kintone.events.on("app.record.detail.show", (event) => {
+  const app = createApp(App);
+  app.mount(kintone.app.record.getHeaderMenuSpaceElement()!);
+  return event;
+});
+
+//Solve the timing issue of asynchronous event execution by manually executing the kintone event.
 const event = new Event("load");
 // @ts-ignore
 cybozu.eventTarget.dispatchEvent(event);

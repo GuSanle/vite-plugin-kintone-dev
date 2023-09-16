@@ -25,8 +25,18 @@ const questions = [
   },
   {
     type: "list",
-    message: "What kind of development do you want to do?",
+    message: "On which platform is your development being applied? ",
     name: "type",
+    choices: [
+      { name: "Desktop", value: "DESKTOP" },
+      { name: "Mobile", value: "MOBILE" },
+    ],
+    default: "DESKTOP",
+  },
+  {
+    type: "list",
+    message: "What kind of development do you want to do?",
+    name: "platform",
     choices: [
       { name: "Portal", value: "PORTAL" },
       { name: "Custom App", value: "APP" },
@@ -39,7 +49,7 @@ const questions = [
     name: "appId",
     default: undefined,
     when(answers: Answers) {
-      return answers.type === "APP";
+      return answers.platform === "APP";
     },
   },
 ];

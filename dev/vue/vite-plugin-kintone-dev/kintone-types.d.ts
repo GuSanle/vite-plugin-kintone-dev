@@ -2,8 +2,6 @@ declare module "kintone-types" {
   export type Type = "DESKTOP" | "MOBILE" | "DESKTOP_CSS" | "MOBILE_CSS";
 
   export type TypeInput = {
-    platform: "APP" | "PORTAL";
-    type: "DESKTOP" | "MOBILE";
     react?: boolean;
     build?: {
       outputName: string;
@@ -22,7 +20,12 @@ declare module "kintone-types" {
     VITE_KINTONE_URL: string;
     VITE_KINTONE_USER_NAME: string;
     VITE_KINTONE_PASSWORD: string;
+    VITE_KINTONE_PLATFORM: "APP" | "PORTAL";
+    VITE_KINTONE_TYPE: "DESKTOP" | "MOBILE";
     VITE_KINTONE_APP?: string;
+    VITE_KINTONE_REACT?: boolean;
+    VITE_KINTONE_BUILD_OUTPUT_NAME?: string;
+    VITE_KINTONE_BUILD_UPLOAD?: boolean;
   }
 
   export interface UploadFileResponse {

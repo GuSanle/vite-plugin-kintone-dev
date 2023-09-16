@@ -18,7 +18,11 @@ function checkEnvType(env: any) {
   if (
     typeof myEnv.VITE_KINTONE_URL !== "string" ||
     typeof myEnv.VITE_KINTONE_USER_NAME !== "string" ||
-    typeof myEnv.VITE_KINTONE_PASSWORD !== "string"
+    typeof myEnv.VITE_KINTONE_PASSWORD !== "string" ||
+    (myEnv.VITE_KINTONE_PLATFORM !== "APP" &&
+      myEnv.VITE_KINTONE_PLATFORM !== "PORTAL") ||
+    (myEnv.VITE_KINTONE_TYPE !== "DESKTOP" &&
+      myEnv.VITE_KINTONE_TYPE !== "MOBILE")
   ) {
     return false;
   }
@@ -60,11 +64,13 @@ export async function checkEnv(
       console.log("env error");
       return;
     }
-    const { kintoneUrl, userName, passWord, appId } = answers;
+    const { kintoneUrl, userName, passWord, platform, type, appId } = answers;
     let env: EnvSetting = {
       VITE_KINTONE_URL: kintoneUrl,
       VITE_KINTONE_USER_NAME: userName,
       VITE_KINTONE_PASSWORD: passWord,
+      VITE_KINTONE_PLATFORM: platform,
+      VITE_KINTONE_TYPE: type,
     };
     if (appId !== undefined) {
       env = { ...env, VITE_KINTONE_APP: appId };

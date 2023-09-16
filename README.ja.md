@@ -30,6 +30,8 @@ setting the .env (sample)
 VITE_KINTONE_URL=a.cybozu.com
 VITE_KINTONE_USER_NAME=a
 VITE_KINTONE_PASSWORD=a
+VITE_KINTONE_PLATFORM=
+VITE_KINTONE_TYPE=
 ## if you are developing in "app", please set the VITE_APP
 VITE_KINTONE_APP=1
 ```
@@ -44,16 +46,15 @@ import kintoneDev from "vite-plugin-kintone-dev";
 
 export default defineConfig({
   plugins: [
-    //platform: "APP" | "PORTAL"   (Portal or App)
-    //type: "DESKTOP" | "MOBILE"   (Desktop or Mobile)
-    kintoneDev({platform: "PORTAL", type: "DESKTOP"}),
+
+    kintoneDev(),
   ],
 });
 ```
 ### オプションのパラメータ
 Reactを使用する場合、react: trueを追加してください。
 ```ts
-kintoneDev({platform: "PORTAL", type: "DESKTOP", react:true})
+kintoneDev({react:true})
 ```
 ビルド時にパラメータを指定したい場合、build: { outputName: "xxx", upload: true }を追加してください。
 ```ts
@@ -78,8 +79,21 @@ kintone + react + vite
 example: [react-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/react-kintone-vite-demo)
 
 ## Note
-開発中に [イベントハンドラー登録の適切なタイミングについて](https://cybozudev.zendesk.com/hc/ja/articles/360000882123)の問題に遭遇した場合、以下のコードを使用して問題を解決することができます。（ビルド時には、ESMモードはもう使用されないため、非同期ロードの問題は存在しないので、削除することができます。）
+開発時に[イベントハンドラー登録の適切なタイミングについて](https://cybozudev.zendesk.com/hc/ja/articles/360000882123)の問題に遭遇した場合、kintoneイベントの使用後にマウントし、以下のコードを使用して問題を解決することができます。  
+（ビルド時には、esmモードを使用しないので、非同期ロードの問題は存在しないため、削除することができます。）   
+src/main.tsの例：  
+
 ```ts
+import { createApp } from "vue";
+import App from "./App.vue";
+
+kintone.events.on("app.record.detail.show", (event) => {
+  const app = createApp(App);
+  app.mount(kintone.app.record.getHeaderMenuSpaceElement()!);
+  return event;
+});
+
+//kintoneイベントを手動で実行することで、非同期イベントの実行タイミングの問題を解決します。
 const event = new Event("load");
 // @ts-ignore
 cybozu.eventTarget.dispatchEvent(event);

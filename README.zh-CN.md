@@ -32,6 +32,8 @@ npm i -D vite-plugin-kintone-dev
 VITE_KINTONE_URL=a.cybozu.com
 VITE_KINTONE_USER_NAME=a
 VITE_KINTONE_PASSWORD=a
+VITE_KINTONE_PLATFORM=
+VITE_KINTONE_TYPE=
 ## 如果你是应用的开发，请设置应用id
 VITE_KINTONE_APP=1
 ```
@@ -46,9 +48,7 @@ import kintoneDev from "vite-plugin-kintone-dev";
 
 export default defineConfig({
   plugins: [
-    //platform: "APP" | "PORTAL"   (Portal or App)
-    //type: "DESKTOP" | "MOBILE"   (Desktop or Mobile)
-    kintoneDev({platform: "PORTAL", type: "DESKTOP"}),
+    kintoneDev(),
   ],
 });
 ```
@@ -56,7 +56,7 @@ export default defineConfig({
 ### 可选参数
 如果使用react，请加上react:true
 ```ts
-kintoneDev({platform: "PORTAL", type: "DESKTOP", react:true})
+kintoneDev({react:true})
 ```
 如果打包时，希望指定参数请加上build:{outputName:"xxx",upload:true}
 ```ts
@@ -83,8 +83,21 @@ example: [react-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kinton
 
 ## Note
 如果开发时遇到[事件句柄的注册时机](https://cybozudev.kf5.com/hc/kb/article/1434396) 问题，
-可以尝试使用如下代码解决问题。（构建时，可以删除，因为构建时，不再使用esm模式，不存在异步加载问题。）
+可以尝试在使用kintone事件后挂载后，使用如下代码解决问题。  
+（构建时，可以删除，因为构建时，不再使用esm模式，不存在异步加载问题。）   
+src/main.ts的示例：  
+
 ```ts
+import { createApp } from "vue";
+import App from "./App.vue";
+
+kintone.events.on("app.record.detail.show", (event) => {
+  const app = createApp(App);
+  app.mount(kintone.app.record.getHeaderMenuSpaceElement()!);
+  return event;
+});
+
+//通过手动执行kintone事件，来解决异步事件执行时机问题
 const event = new Event("load");
 // @ts-ignore
 cybozu.eventTarget.dispatchEvent(event);

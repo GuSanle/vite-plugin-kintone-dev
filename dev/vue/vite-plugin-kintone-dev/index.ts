@@ -43,7 +43,7 @@ export default function kintoneDev(options: TypeInput): Plugin[] {
           );
           const { isEnvOk, env } = validateEnv(envConfig, viteConfig);
           if (isEnvOk) {
-            devUpdate(env, [fileUrl], options).then((r) => {
+            devUpdate(env, [fileUrl]).then((r) => {
               fs.unlinkSync(fileUrl);
             });
           } else {
@@ -98,7 +98,7 @@ export default function kintoneDev(options: TypeInput): Plugin[] {
         if (isEnvOk) {
           //是否需要根据output name来判断是否进行上传？
           if (options.build?.upload) {
-            devUpdate(env, fileList, options).catch(() => {
+            devUpdate(env, fileList).catch(() => {
               console.log("upload failed");
             });
           }
