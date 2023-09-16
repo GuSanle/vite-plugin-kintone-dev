@@ -11,14 +11,7 @@ import { FileSystemIconLoader } from "unplugin-icons/loaders";
 export default defineConfig({
   plugins: [
     vue(),
-    kintoneDev({
-      platform: "PORTAL",
-      type: "DESKTOP",
-      build: {
-        outputName: "DESKTOP",
-        upload: true,
-      },
-    }),
+    kintoneDev({ outputName: "DESKTOP" }),
     Components({
       resolvers: [IconsResolver()],
     }),

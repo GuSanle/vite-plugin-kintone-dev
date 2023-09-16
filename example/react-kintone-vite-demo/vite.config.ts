@@ -5,17 +5,5 @@ import svgr from "vite-plugin-svgr";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    svgr(),
-    kintoneDev({
-      platform: "PORTAL",
-      type: "DESKTOP",
-      react: true,
-      build: {
-        outputName: "DESKTOP",
-        upload: true,
-      },
-    }),
-  ],
+  plugins: [react(), svgr(), kintoneDev({ outputName: "DESKTOP" })],
 });
