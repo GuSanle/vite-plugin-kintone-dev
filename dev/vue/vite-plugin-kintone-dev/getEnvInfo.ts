@@ -7,7 +7,7 @@ import {
 import fs from "node:fs";
 import path from "node:path";
 import { type EnvSetting } from "kintone-types";
-import userInquirer from "./inquirer";
+import userInquirer from "./cli";
 import type { Answers } from "inquirer";
 
 function checkEnvType(env: any) {
@@ -34,6 +34,23 @@ function checkEnvType(env: any) {
   ) {
     return false;
   }
+
+  if (
+    myEnv.VITE_KINTONE_REACT !== undefined &&
+    myEnv.VITE_KINTONE_REACT !== "true" &&
+    myEnv.VITE_KINTONE_REACT !== "false"
+  ) {
+    return false;
+  }
+
+  if (
+    myEnv.VITE_KINTONE_BUILD_UPLOAD !== undefined &&
+    myEnv.VITE_KINTONE_BUILD_UPLOAD !== "true" &&
+    myEnv.VITE_KINTONE_BUILD_UPLOAD !== "false"
+  ) {
+    return false;
+  }
+
   return true;
 }
 
@@ -64,16 +81,21 @@ export async function checkEnv(
       console.log("env error");
       return;
     }
-    const { kintoneUrl, userName, passWord, platform, type, appId } = answers;
     let env: EnvSetting = {
-      VITE_KINTONE_URL: kintoneUrl,
-      VITE_KINTONE_USER_NAME: userName,
-      VITE_KINTONE_PASSWORD: passWord,
-      VITE_KINTONE_PLATFORM: platform,
-      VITE_KINTONE_TYPE: type,
+      VITE_KINTONE_URL: answers.kintoneUrl,
+      VITE_KINTONE_USER_NAME: answers.userName,
+      VITE_KINTONE_PASSWORD: answers.passWord,
+      VITE_KINTONE_PLATFORM: answers.platform,
+      VITE_KINTONE_TYPE: answers.type,
     };
-    if (appId !== undefined) {
-      env = { ...env, VITE_KINTONE_APP: appId };
+    if (answers.isReact !== undefined) {
+      env = { ...env, VITE_KINTONE_REACT: answers.isReact };
+    }
+    if (answers.upload !== undefined) {
+      env = { ...env, VITE_KINTONE_BUILD_UPLOAD: answers.upload };
+    }
+    if (answers.appId !== undefined) {
+      env = { ...env, VITE_KINTONE_APP: answers.appId };
     }
     const resolvedRoot = normalizePath(
       viteConfig.root ? path.resolve(viteConfig.root) : process.cwd()

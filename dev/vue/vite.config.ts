@@ -12,12 +12,7 @@ export default defineConfig({
   plugins: [
     vue(),
     kintoneDev({
-      platform: "APP",
-      type: "DESKTOP",
-      build: {
-        outputName: "DESKTOP",
-        upload: true,
-      },
+      outputName: "mobile",
     }),
     Components({
       resolvers: [IconsResolver()],

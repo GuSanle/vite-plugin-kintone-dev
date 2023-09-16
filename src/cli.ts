@@ -52,6 +52,26 @@ const questions = [
       return answers.platform === "APP";
     },
   },
+  {
+    type: "list",
+    message: "Is React?",
+    name: "isReact",
+    choices: [
+      { name: "react", value: "true" },
+      { name: "others", value: "false" },
+    ],
+    default: "false",
+  },
+  {
+    type: "list",
+    message: "need auto upload?",
+    name: "upload",
+    choices: [
+      { name: "upload", value: "true" },
+      { name: "not upload", value: "false" },
+    ],
+    default: "false",
+  },
 ];
 
 export default function userInquirer() {

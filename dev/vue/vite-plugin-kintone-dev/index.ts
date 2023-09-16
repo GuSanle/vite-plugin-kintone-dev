@@ -3,15 +3,15 @@ import { OutputOptions } from "rollup";
 import { devUpdate, devFileName } from "./devUpdate";
 import path from "node:path";
 import fs from "node:fs";
-import type { TypeInput } from "kintone-types";
 import kintoneModuleInject from "./kintoneModuleInject";
 import getServerInfo from "./getServerInfo";
 import getIndexScripts from "./getIndexScripts";
 import { validateEnv, checkEnv } from "./getEnvInfo";
 import getEntry from "./getEntry";
 import getDirFiles from "./getDirFiles";
+import { TypeInput } from "kintone-types";
 
-export default function kintoneDev(options: TypeInput): Plugin[] {
+export default function kintoneDev(options: TypeInput | undefined): Plugin[] {
   let viteConfig: ResolvedConfig;
   let envConfig: ConfigEnv;
 
@@ -27,6 +27,11 @@ export default function kintoneDev(options: TypeInput): Plugin[] {
       },
       configureServer(server) {
         server.httpServer?.once("listening", async () => {
+          const { isEnvOk, env } = validateEnv(envConfig, viteConfig);
+          if (!isEnvOk) {
+            console.log("env error");
+            return;
+          }
           const devServerUrl = getServerInfo(server);
           if (!server.config.server.origin) {
             server.config.server.origin = devServerUrl;
@@ -37,18 +42,18 @@ export default function kintoneDev(options: TypeInput): Plugin[] {
           }
           const scriptList = getIndexScripts();
           const fileUrl = path.resolve(outputDir, devFileName);
+
           fs.writeFileSync(
             fileUrl,
-            kintoneModuleInject(devServerUrl, scriptList, options.react)
+            kintoneModuleInject(
+              devServerUrl,
+              scriptList,
+              env.react === "true" ? true : false
+            )
           );
-          const { isEnvOk, env } = validateEnv(envConfig, viteConfig);
-          if (isEnvOk) {
-            devUpdate(env, [fileUrl]).then((r) => {
-              fs.unlinkSync(fileUrl);
-            });
-          } else {
-            console.log("env error");
-          }
+          devUpdate(env, [fileUrl]).then((r) => {
+            fs.unlinkSync(fileUrl);
+          });
         });
       },
     },
@@ -57,9 +62,8 @@ export default function kintoneDev(options: TypeInput): Plugin[] {
       apply: "build",
       enforce: "post",
       config(config, env) {
-        const entry = getEntry(config);
         envConfig = env;
-
+        const entry = getEntry(config);
         config.build = {
           modulePreload: { polyfill: false },
           manifest: true,
@@ -72,14 +76,14 @@ export default function kintoneDev(options: TypeInput): Plugin[] {
           },
         };
 
-        if (options?.build?.outputName !== undefined) {
+        if (options?.outputName !== undefined) {
           (
             config.build.rollupOptions?.output as OutputOptions
-          ).entryFileNames = `${options?.build?.outputName}.js`;
+          ).entryFileNames = `${options?.outputName}.js`;
           (config.build.rollupOptions?.output as OutputOptions).assetFileNames =
             (assetInfo): string => {
               if (assetInfo.name?.endsWith(".css")) {
-                return `${options?.build?.outputName}[extname]`;
+                return `${options?.outputName}[extname]`;
               } else {
                 return assetInfo.name as string;
               }
@@ -97,7 +101,7 @@ export default function kintoneDev(options: TypeInput): Plugin[] {
         const { isEnvOk, env } = validateEnv(envConfig, viteConfig);
         if (isEnvOk) {
           //是否需要根据output name来判断是否进行上传？
-          if (options.build?.upload) {
+          if (env.upload === "true" ? true : false) {
             devUpdate(env, fileList).catch(() => {
               console.log("upload failed");
             });
