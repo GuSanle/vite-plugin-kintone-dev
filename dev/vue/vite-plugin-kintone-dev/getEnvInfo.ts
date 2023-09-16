@@ -8,7 +8,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { type EnvSetting } from "kintone-types";
 import userInquirer from "./cli";
-import type { Answers } from "inquirer";
 
 function checkEnvType(env: any) {
   // 使用类型断言
@@ -74,13 +73,7 @@ export async function checkEnv(
 ) {
   let { isEnvOk, env: existingEnv } = validateEnv(envConfig, viteConfig);
   if (!isEnvOk) {
-    let answers: Answers;
-    try {
-      answers = await userInquirer();
-    } catch (e) {
-      console.log("env error");
-      return;
-    }
+    const answers = await userInquirer(envConfig.command);
     let env: EnvSetting = {
       VITE_KINTONE_URL: answers.kintoneUrl,
       VITE_KINTONE_USER_NAME: answers.userName,

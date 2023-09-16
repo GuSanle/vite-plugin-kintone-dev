@@ -1,13 +1,13 @@
 import axios, { Axios } from "axios";
 import fs from "node:fs";
 import FormData from "form-data";
-import {
-  type jsFiles,
-  type UploadFileResponse,
-  type GetSystemSettingResponse,
-  type GetAppSettingResponse,
-  type GetAppInfo,
-  type UpdateSystemSettingResponse,
+import type {
+  jsFiles,
+  UploadFileResponse,
+  GetSystemSettingResponse,
+  GetAppSettingResponse,
+  GetAppInfo,
+  UpdateResponse,
 } from "kintone-types";
 
 export default class kintoneApi {
@@ -61,7 +61,7 @@ export default class kintoneApi {
   updateSystemSetting(
     jsScope: string,
     jsFiles: Array<jsFiles>
-  ): Promise<UpdateSystemSettingResponse> {
+  ): Promise<UpdateResponse> {
     const url = "/k/api/js/updateSystemSetting.json";
     const body = {
       jsScope,
@@ -91,7 +91,7 @@ export default class kintoneApi {
     jsScope: string,
     jsFiles: Array<jsFiles>,
     name: string
-  ): Promise<UpdateSystemSettingResponse> {
+  ): Promise<UpdateResponse> {
     const url = "/k/api/dev/app/update.json";
     const body = {
       id,
@@ -103,7 +103,7 @@ export default class kintoneApi {
   }
 
   //更新应用自定义设置 todo 返回类型调整
-  deploySetting(app: string): Promise<UpdateSystemSettingResponse> {
+  deploySetting(app: string): Promise<UpdateResponse> {
     const url = "/k/api/dev/app/deploy.json";
     const body = {
       app,

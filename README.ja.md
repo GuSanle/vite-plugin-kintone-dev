@@ -22,23 +22,11 @@ yarn add -D vite-plugin-kintone-dev
 npm i -D vite-plugin-kintone-dev
 ```
 ## Configuration
-初回起動時に、自動的にenvファイルの設定テンプレートをチェックします。設定がない場合は、コマンドラインインタラクションを起動して設定情報を入力させ、自動的にenvファイルを更新します。   
-（serveモードでは ".env.development" ファイル、buildモードでは ".env.production" ファイル）   
-envファイルの設定が間違っている場合は、自分で修正することができます。    
-setting the .env (sample)
-```sh
-VITE_KINTONE_URL=a.cybozu.com
-VITE_KINTONE_USER_NAME=a
-VITE_KINTONE_PASSWORD=a
-VITE_KINTONE_PLATFORM=
-VITE_KINTONE_TYPE=
-## if you are developing in "app", please set the VITE_APP
-VITE_KINTONE_APP=1
-```
+初回起動時に、自動的にenvファイルの設定テンプレートをチェックします。設定がない場合は、コマンドラインインタラクションを起動して設定情報を入力させ、自動的にenvファイルを更新します。     
+envファイルの設定が間違っている場合は、自分で修正することができます。 
+（serveモードでは ".env.development" ファイル、buildモードでは ".env.production" ファイル）    
 
 ## Usage
-
-### 必要なパラメータ
 ```ts
 // vite.config.ts
 import { defineConfig } from "vite";
@@ -46,25 +34,15 @@ import kintoneDev from "vite-plugin-kintone-dev";
 
 export default defineConfig({
   plugins: [
-
     kintoneDev(),
   ],
 });
 ```
-### オプションのパラメータ
-Reactを使用する場合、react: trueを追加してください。
-```ts
-kintoneDev({react:true})
-```
-ビルド時にパラメータを指定したい場合、build: { outputName: "xxx", upload: true }を追加してください。
+## Optional Parameters
+パッケージング時にファイル名を指定したい場合は、パラメーターを追加してください。{ outputName: "mobile" }
 ```ts
 kintoneDev({
-  platform: "PORTAL",
-  type: "DESKTOP",
-  build:{
-    outputName:"mobile",
-    upload:true
-  }
+  outputName:"mobile"
 })
 ```
  

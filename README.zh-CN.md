@@ -25,22 +25,10 @@ npm i -D vite-plugin-kintone-dev
 
 ## Configuration
 第一次启动时，会自动检查你的env文件的设置模版。如果没有配置，会启动命令行交互，让你输入配置信息。同时自动更新你的env文件。   
+如果你的env文件设置有误，可以自行去修改。
 （serve模式下为".env.development"文件, build模式下为".env.production"文件）  
-如果你的env文件设置有误，可以自行去修改。   
-.env.development
-```sh
-VITE_KINTONE_URL=a.cybozu.com
-VITE_KINTONE_USER_NAME=a
-VITE_KINTONE_PASSWORD=a
-VITE_KINTONE_PLATFORM=
-VITE_KINTONE_TYPE=
-## 如果你是应用的开发，请设置应用id
-VITE_KINTONE_APP=1
-```
 
 ## Usage
-
-### 必选参数
 ```ts
 // vite.config.ts
 import { defineConfig } from "vite";
@@ -53,20 +41,11 @@ export default defineConfig({
 });
 ```
 
-### 可选参数
-如果使用react，请加上react:true
-```ts
-kintoneDev({react:true})
-```
-如果打包时，希望指定参数请加上build:{outputName:"xxx",upload:true}
+## Optional Parameters
+如果打包时，希望指定文件名，请加上参数{outputName:"xxx"}
 ```ts
 kintoneDev({
-  platform: "PORTAL",
-  type: "DESKTOP",
-  build:{
-    outputName:"mobile",
-    upload:true
-  }
+  outputName:"mobile"
 })
 ```
 

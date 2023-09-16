@@ -16,11 +16,11 @@ declare module "kintone-types" {
     VITE_KINTONE_URL: string;
     VITE_KINTONE_USER_NAME: string;
     VITE_KINTONE_PASSWORD: string;
-    VITE_KINTONE_PLATFORM: "APP" | "PORTAL";
-    VITE_KINTONE_TYPE: "DESKTOP" | "MOBILE";
+    VITE_KINTONE_PLATFORM: string;
+    VITE_KINTONE_TYPE: string;
     VITE_KINTONE_APP?: string;
-    VITE_KINTONE_REACT?: "true" | "false";
-    VITE_KINTONE_BUILD_UPLOAD?: "true" | "false";
+    VITE_KINTONE_REACT?: string;
+    VITE_KINTONE_BUILD_UPLOAD?: string;
   }
 
   export interface UploadFileResponse {
@@ -48,7 +48,7 @@ declare module "kintone-types" {
     result: { scripts: ScriptsList; scope: string };
   }
 
-  export interface UpdateSystemSettingResponse {
+  export interface UpdateResponse {
     result: object;
   }
 

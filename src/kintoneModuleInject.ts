@@ -1,4 +1,4 @@
-import { type ScriptList } from "kintone-types";
+import type { ScriptList } from "kintone-types";
 
 function reactInject(devServerUrl: string) {
   return `const scriptElement = document.createElement("script");

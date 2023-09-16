@@ -23,19 +23,9 @@ npm i -D vite-plugin-kintone-dev
 ```
 
 ## Configuration
-On the first launch, it will automatically check your env file's setting template. If it is not configured, it will start a command line interaction for you to enter configuration information, and automatically update your env file.    
-(In serve mode, it's the ".env.development" file, in build mode, it's the ".env.production" file)   
-If your env file settings are incorrect, you can modify them yourself.   
-setting the .env (sample)
-```sh
-VITE_KINTONE_URL=a.cybozu.com
-VITE_KINTONE_USER_NAME=a
-VITE_KINTONE_PASSWORD=a
-VITE_KINTONE_PLATFORM=
-VITE_KINTONE_TYPE=
-## if you are developing in "app", please set the VITE_KINTONE_APP
-VITE_KINTONE_APP=1
-```
+On the first launch, it will automatically check your env file's setting template. If it is not configured, it will start a command line interaction for you to enter configuration information, and automatically update your env file.       
+If your env file settings are incorrect, you can modify them yourself.  
+(In serve mode, it's the ".env.development" file, in build mode, it's the ".env.production" file) 
 
 ## Usage
 
@@ -51,20 +41,11 @@ export default defineConfig({
   ],
 });
 ```
-### Optional Parameters
-If using React, please add react: true.
-```ts
-kintoneDev({react:true})
-```
-If you want to specify parameters during the build, please add build: { outputName: "xxx", upload: true }.
+## Optional Parameters
+If you want to specify the file name when packaging, please add the parameter { outputName: "xxx" }.
 ```ts
 kintoneDev({
-  platform: "PORTAL",
-  type: "DESKTOP",
-  build:{
-    outputName:"mobile",
-    upload:true
-  }
+  outputName:"mobile"
 })
 ```
     

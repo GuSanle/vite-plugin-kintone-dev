@@ -1,6 +1,5 @@
 import kintoneApi from "./kintoneApi";
 import path from "node:path";
-
 import type { Type, EnvSetting, JsList } from "kintone-types";
 
 export const devFileName = "vite_plugin_kintone_dev_module_hack.js";
