@@ -11,7 +11,7 @@ import getEntry from "./getEntry";
 import getDirFiles from "./getDirFiles";
 import { TypeInput } from "kintone-types";
 
-export default function kintoneDev(options: TypeInput | undefined): Plugin[] {
+export default function kintoneDev(options?: TypeInput): Plugin[] {
   let viteConfig: ResolvedConfig;
   let envConfig: ConfigEnv;
 
