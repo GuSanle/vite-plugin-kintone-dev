@@ -48,7 +48,7 @@ export default function kintoneDev(options: TypeInput | undefined): Plugin[] {
             kintoneModuleInject(
               devServerUrl,
               scriptList,
-              env.react === "true" ? true : false
+              env.VITE_KINTONE_REACT === "true" ? true : false
             )
           );
           devUpdate(env, [fileUrl]).then((r) => {
@@ -101,7 +101,7 @@ export default function kintoneDev(options: TypeInput | undefined): Plugin[] {
         const { isEnvOk, env } = validateEnv(envConfig, viteConfig);
         if (isEnvOk) {
           //是否需要根据output name来判断是否进行上传？
-          if (env.upload === "true" ? true : false) {
+          if (env.VITE_KINTONE_BUILD_UPLOAD === "true" ? true : false) {
             devUpdate(env, fileList).catch(() => {
               console.log("upload failed");
             });
