@@ -39,10 +39,11 @@ export default defineConfig({
 });
 ```
 ## Optional Parameters
-パッケージング時にファイル名を指定したい場合は、パラメーターを追加してください。{ outputName: "mobile" }
+ビルド時に、ファイル名を指定したい場合は、パラメーター{outputName:"xxx"}を追加してください。自動的にkintoneにアップロードしたい場合は、パラメーター{upload:true}を追加してください。   
 ```ts
 kintoneDev({
-  outputName:"mobile"
+  outputName:"mobile",
+  upload:true
 })
 ```
  

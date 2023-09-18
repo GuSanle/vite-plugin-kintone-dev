@@ -42,14 +42,6 @@ function checkEnvType(env: any) {
     return false;
   }
 
-  if (
-    myEnv.VITE_KINTONE_BUILD_UPLOAD !== undefined &&
-    myEnv.VITE_KINTONE_BUILD_UPLOAD !== "true" &&
-    myEnv.VITE_KINTONE_BUILD_UPLOAD !== "false"
-  ) {
-    return false;
-  }
-
   return true;
 }
 
@@ -83,9 +75,6 @@ export async function checkEnv(
     };
     if (answers.isReact !== undefined) {
       env = { ...env, VITE_KINTONE_REACT: answers.isReact };
-    }
-    if (answers.upload !== undefined) {
-      env = { ...env, VITE_KINTONE_BUILD_UPLOAD: answers.upload };
     }
     if (answers.appId !== undefined) {
       env = { ...env, VITE_KINTONE_APP: answers.appId };

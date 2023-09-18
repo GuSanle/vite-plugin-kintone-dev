@@ -3,6 +3,7 @@ declare module "kintone-types" {
 
   export type TypeInput = {
     outputName?: string;
+    upload?: boolean;
   };
 
   export interface JsList {
@@ -20,7 +21,6 @@ declare module "kintone-types" {
     VITE_KINTONE_TYPE: string;
     VITE_KINTONE_APP?: string;
     VITE_KINTONE_REACT?: string;
-    VITE_KINTONE_BUILD_UPLOAD?: string;
   }
 
   export interface UploadFileResponse {

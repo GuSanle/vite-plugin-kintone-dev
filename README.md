@@ -28,8 +28,6 @@ If your env file settings are incorrect, you can modify them yourself.
 (In serve mode, it's the ".env.development" file, in build mode, it's the ".env.production" file) 
 
 ## Usage
-
-### Required Parameters
 ```ts
 // vite.config.ts
 import { defineConfig } from "vite";
@@ -42,10 +40,11 @@ export default defineConfig({
 });
 ```
 ## Optional Parameters
-If you want to specify the file name when packaging, please add the parameter { outputName: "xxx" }.
+When building, if you want to specify the file name, please add the parameter {outputName:"xxx"}. If you want to automatically upload to kintone, please add the parameter {upload:true}.    
 ```ts
 kintoneDev({
-  outputName:"mobile"
+  outputName:"mobile",
+  upload:true
 })
 ```
     

@@ -42,10 +42,11 @@ export default defineConfig({
 ```
 
 ## Optional Parameters
-如果打包时，希望指定文件名，请加上参数{outputName:"xxx"}
+构建时，希望指定文件名，请加上参数{outputName:"xxx"}，希望自动上传到kintone，请加上参数{upload:true}。     
 ```ts
 kintoneDev({
-  outputName:"mobile"
+  outputName:"mobile",
+  upload:true
 })
 ```
 

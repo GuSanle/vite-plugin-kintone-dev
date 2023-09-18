@@ -101,7 +101,7 @@ export default function kintoneDev(options?: TypeInput): Plugin[] {
         const { isEnvOk, env } = validateEnv(envConfig, viteConfig);
         if (isEnvOk) {
           //是否需要根据output name来判断是否进行上传？
-          if (env.VITE_KINTONE_BUILD_UPLOAD === "true" ? true : false) {
+          if (options?.upload) {
             devUpdate(env, fileList).catch(() => {
               console.log("upload failed");
             });

@@ -13,6 +13,7 @@ export default defineConfig({
     vue(),
     kintoneDev({
       outputName: "mobile",
+      upload: true,
     }),
     Components({
       resolvers: [IconsResolver()],
