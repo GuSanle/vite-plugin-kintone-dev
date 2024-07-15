@@ -55,7 +55,7 @@ kintoneDev({
 
 ## Example
 
-kintone mobile custom demo (vite4 + vue3 + vant4 + typescript)
+kintone mobile custom demo (vite4 + vue3 + vant4 + typescript)  
 <img src="images/vantdemo.png" width="200" >  
 example: [kintone mobile custom demo](https://github.com/GuSanle/kintone-mobile-custom-demo)
 

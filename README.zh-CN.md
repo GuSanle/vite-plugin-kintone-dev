@@ -56,7 +56,7 @@ vite build 时，会删除这段 js 脚本。并生成 build 后的 js 文件。
 
 ## Example
 
-kintone mobile custom demo (vite4 + vue3 + vant4 + typescript)
+kintone mobile custom demo (vite4 + vue3 + vant4 + typescript)  
 <img src="images/vantdemo.png" width="200" >  
 example: [kintone mobile custom demo](https://github.com/GuSanle/kintone-mobile-custom-demo)
 
