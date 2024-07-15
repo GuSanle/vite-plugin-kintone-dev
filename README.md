@@ -55,9 +55,13 @@ After launching vite dev the 'vite_plugin_kintone_dev_module_hack.js' script wil
 
 ## Example
 
-kintone mobile custom demo (vite4 + vue3 + vant4 + typescript)  
+Some kintone mobile demo:
+React + TypeScript + Vite + kintone + material-ui
+example: [kintone mobile custom deme(react)](https://github.com/GuSanle/kintone-vite-mui-demo)
+
+vue3 + vite4 + + vant4 + typescript  
 <img src="images/vantdemo.png" width="200" >  
-example: [kintone mobile custom demo](https://github.com/GuSanle/kintone-mobile-custom-demo)
+example: [kintone mobile custom demo(vue)](https://github.com/GuSanle/kintone-mobile-custom-demo)
 
 kintone + vue + vite  
 example: [vue-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/vue-kintone-vite-demo)
