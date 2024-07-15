@@ -55,14 +55,18 @@ kintoneDev({
 
 ## Example
 
-kintone mobile custom demo (vite4 + vue3 + vant4 + typescript)  
-<img src="images/vantdemo.png" width="200" >  
-example: [kintone mobile custom demo](https://github.com/GuSanle/kintone-mobile-custom-demo)
+kintone mobile demo:  
+_React + TypeScript + Vite + kintone + material-ui_  
+example: [kintone mobile custom deme(react)](https://github.com/GuSanle/kintone-vite-mui-demo)
 
-kintone + vue + vite  
+_kintone mobile custom demo (vite4 + vue3 + vant4 + typescript)_  
+<img src="images/vantdemo.png" width="200" >  
+example: [kintone mobile custom demo(vue)](https://github.com/GuSanle/kintone-mobile-custom-demo)
+
+_kintone + vue + vite_  
 example: [vue-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/vue-kintone-vite-demo)
 
-kintone + react + vite  
+_kintone + react + vite_  
 example: [react-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/react-kintone-vite-demo)
 
 ## Note
