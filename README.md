@@ -194,41 +194,7 @@ import logoUrl from './assets/logo.svg'
 </template>
 ```
 
-See the example project for a full implementation.
 
-
-```
-
-Then configure Vite:
-
-```ts
-// vite.config.ts
-import fs from 'node:fs'
-import path from 'node:path'
-
-export default defineConfig({
-  plugins: [kintoneDev()]
-})
-```
-
-### Method 2: Using Vite's Auto-Generated Certificates
-
-Vite can generate self-signed certificates automatically, but browsers will show security warnings:
-
-```ts
-// vite.config.ts
-export default defineConfig({
-  plugins: [kintoneDev()],
-  server: {
-    https: {} // Vite will generate certificates automatically
-  }
-})
-```
-
-To bypass browser warnings:
-1. Navigate to `https://localhost:5173` (or your dev server URL)
-2. Click "Advanced" and proceed to the site
-3. Accept the security risk
 
 
 
