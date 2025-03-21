@@ -40,15 +40,7 @@ import kintoneDev from "vite-plugin-kintone-dev";
 export default defineConfig({
   plugins: [
     kintoneDev(),
-  ],
-  // 插件会自动添加server配置，但你仍然可以根据需要自定义
-  server: {
-    // 如果需要HTTPS，可以在这里添加
-    https: {
-      key: fs.readFileSync("your-key.pem"),
-      cert: fs.readFileSync("your-cert.pem"),
-    },
-  },
+  ]
 });
 ```
 

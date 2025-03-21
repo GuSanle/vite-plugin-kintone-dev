@@ -40,16 +40,7 @@ import kintoneDev from "vite-plugin-kintone-dev";
 export default defineConfig({
   plugins: [
     kintoneDev(),
-  ],
-  // The server configuration is automatically added by the plugin,
-  // but you can still customize it as needed
-  server: {
-    // If you need HTTPS, you can add it here
-    https: {
-      key: fs.readFileSync("your-key.pem"),
-      cert: fs.readFileSync("your-cert.pem"),
-    },
-  },
+  ]
 });
 ```
 
@@ -205,23 +196,7 @@ import logoUrl from './assets/logo.svg'
 
 See the example project for a full implementation.
 
-## HTTPS Configuration
 
-When developing for Kintone, you may need HTTPS. There are several ways to set up HTTPS:
-
-### Method 1: Using mkcert (Recommended)
-
-[mkcert](https://github.com/FiloSottile/mkcert) creates locally-trusted development certificates.
-
-```bash
-# Install mkcert
-brew install mkcert # macOS
-mkcert -install
-
-# Generate certificates
-mkdir certs
-cd certs
-mkcert localhost 127.0.0.1
 ```
 
 Then configure Vite:
@@ -232,13 +207,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 export default defineConfig({
-  plugins: [kintoneDev()],
-  server: {
-    https: {
-      cert: fs.readFileSync(path.resolve(__dirname, 'certs/localhost+1.pem')),
-      key: fs.readFileSync(path.resolve(__dirname, 'certs/localhost+1-key.pem')),
-    }
-  }
+  plugins: [kintoneDev()]
 })
 ```
 
