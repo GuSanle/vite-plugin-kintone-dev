@@ -20,6 +20,8 @@ This OSS is my own personal work and does not have any relationship with Cybozu 
 yarn add -D vite-plugin-kintone-dev
 # npm
 npm i -D vite-plugin-kintone-dev
+# pnpm
+pnpm add -D vite-plugin-kintone-dev
 ```
 
 ## Configuration
@@ -37,19 +39,31 @@ export default defineConfig({
   plugins: [
     kintoneDev(),
   ],
+  // The server configuration is automatically added by the plugin,
+  // but you can still customize it as needed
+  server: {
+    // If you need HTTPS, you can add it here
+    https: {
+      key: fs.readFileSync("your-key.pem"),
+      cert: fs.readFileSync("your-cert.pem"),
+    },
+  },
 });
 ```
+
 ## Optional Parameters
 When building, if you want to specify the file name, please add the parameter {outputName:"xxx"}. If you want to automatically upload to kintone, please add the parameter {upload:true}.    
 ```ts
 kintoneDev({
-  outputName:"mobile",
-  upload:true
+  outputName: "mobile",
+  upload: true
 })
 ```
     
-After launching vite dev the 'vite_plugin_kintone_dev_module_hack.js' script will be automatically uploaded to the custom settings page of kintone. During vite build, this JavaScript script will be deleted, and the post-build JS file will be generated
+After launching vite dev the 'vite_plugin_kintone_dev_module_hack.js' script will be automatically uploaded to the custom settings page of kintone. During vite build, this JavaScript script will be deleted, and the post-build JS file will be generated.
 
+## Vite 6 Support
+This plugin now supports Vite 6 with improved performance and better error handling. All necessary server configurations (host, cors) are automatically added by the plugin, so you don't need to manually set them up.
 
 ## Example
 kintone + vue + vite   
@@ -78,6 +92,160 @@ const event = new Event("load");
 // @ts-ignore
 cybozu.eventTarget.dispatchEvent(event);
 ```
+
+## Development
+
+This project uses pnpm workspaces for development. The recommended workflow is:
+
+1. Clone this repository
+2. Install dependencies:
+   ```bash
+   pnpm install
+   ```
+3. Set up your environment variables in the example project:
+   ```bash
+   cd examples/vue-demo
+   cp .env.sample .env.development
+   # Edit .env.development with your Kintone credentials
+   ```
+4. Start the development server:
+   ```bash
+   # From the root directory
+   pnpm dev
+   ```
+
+## Testing Your Own Changes
+
+If you've made changes to the plugin and want to test them:
+
+1. Build the plugin:
+   ```bash
+   pnpm build
+   ```
+2. Run the example project:
+   ```bash
+   pnpm dev
+   ```
+
+The example project uses the local version of the plugin through the workspace dependency.
+
+## Static Resources Handling
+
+When developing for Kintone, handling static resources like SVG icons properly is important. Unlike Webpack, Rollup (used by Vite) doesn't have loaders that allow you to inline asset resources directly.
+
+### Recommended Approaches:
+
+1. **For SVG Icons**: Use plugins like [unplugin-icons](https://github.com/unplugin/unplugin-icons) to import SVG as Vue components.
+
+2. **For Large Images**: Import them as external URLs.
+
+### Example Setup:
+
+```ts
+// vite.config.ts
+import Icons from 'unplugin-icons/vite'
+import IconsResolver from 'unplugin-icons/resolver'
+import Components from 'unplugin-vue-components/vite'
+import { FileSystemIconLoader } from 'unplugin-icons/loaders'
+
+export default defineConfig({
+  plugins: [
+    // ...other plugins
+    
+    // Auto import components
+    Components({
+      resolvers: [IconsResolver()],
+    }),
+    
+    // Configure icons
+    Icons({
+      autoInstall: true,
+      customCollections: {
+        // Load custom icons from assets directory
+        'my-icons': FileSystemIconLoader('./src/assets'),
+      },
+    }),
+  ],
+})
+```
+
+### Using Icons in Components:
+
+```vue
+<script setup>
+// Import SVG as component
+import IconLogo from '~icons/my-icons/logo'
+
+// Or import as URL
+import logoUrl from './assets/logo.svg'
+</script>
+
+<template>
+  <!-- Use as component -->
+  <IconLogo />
+  
+  <!-- Use as image source -->
+  <img :src="logoUrl" alt="Logo" />
+</template>
+```
+
+See the example project for a full implementation.
+
+## HTTPS Configuration
+
+When developing for Kintone, you may need HTTPS. There are several ways to set up HTTPS:
+
+### Method 1: Using mkcert (Recommended)
+
+[mkcert](https://github.com/FiloSottile/mkcert) creates locally-trusted development certificates.
+
+```bash
+# Install mkcert
+brew install mkcert # macOS
+mkcert -install
+
+# Generate certificates
+mkdir certs
+cd certs
+mkcert localhost 127.0.0.1
+```
+
+Then configure Vite:
+
+```ts
+// vite.config.ts
+import fs from 'node:fs'
+import path from 'node:path'
+
+export default defineConfig({
+  plugins: [kintoneDev()],
+  server: {
+    https: {
+      cert: fs.readFileSync(path.resolve(__dirname, 'certs/localhost+1.pem')),
+      key: fs.readFileSync(path.resolve(__dirname, 'certs/localhost+1-key.pem')),
+    }
+  }
+})
+```
+
+### Method 2: Using Vite's Auto-Generated Certificates
+
+Vite can generate self-signed certificates automatically, but browsers will show security warnings:
+
+```ts
+// vite.config.ts
+export default defineConfig({
+  plugins: [kintoneDev()],
+  server: {
+    https: {} // Vite will generate certificates automatically
+  }
+})
+```
+
+To bypass browser warnings:
+1. Navigate to `https://localhost:5173` (or your dev server URL)
+2. Click "Advanced" and proceed to the site
+3. Accept the security risk
 
 
 

@@ -50,12 +50,12 @@ kintoneDev({
 'vite dev'を起動すると、'vite_plugin_kintone_dev_module_hack.js'スクリプトがKintoneのカスタム設定ページに自動アップロードされます。 'vite build'の際には、このJavaScriptスクリプトが削除され、ビルド後のJSファイルが生成されます。
 
 
-## Example
+## サンプル
 kintone + vue + vite   
-example: [vue-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/vue-kintone-vite-demo)
+サンプル: [vue-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/vue-kintone-vite-demo)
 
 kintone + react + vite   
-example: [react-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/react-kintone-vite-demo)
+サンプル: [react-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/react-kintone-vite-demo)
 
 ## Note
 開発時に[イベントハンドラー登録の適切なタイミングについて](https://cybozudev.zendesk.com/hc/ja/articles/360000882123)の問題に遭遇した場合、kintoneイベントの使用後にマウントし、以下のコードを使用して問題を解決することができます。  

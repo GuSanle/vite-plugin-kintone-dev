@@ -1,115 +1,156 @@
-import { ResolvedConfig, type Plugin, ConfigEnv } from "vite";
-import { OutputOptions } from "rollup";
-import { devUpdate, devFileName } from "./devUpdate";
-import path from "node:path";
-import fs from "node:fs";
-import kintoneModuleInject from "./kintoneModuleInject";
-import getServerInfo from "./getServerInfo";
-import getIndexScripts from "./getIndexScripts";
-import { validateEnv, checkEnv } from "./getEnvInfo";
-import getEntry from "./getEntry";
-import getDirFiles from "./getDirFiles";
-import { TypeInput } from "kintone-types";
+import { ResolvedConfig, type Plugin, ConfigEnv, UserConfig } from 'vite'
+import type { OutputOptions, PreRenderedAsset } from 'rollup'
+import { devUpdate, devFileName } from './devUpdate'
+import path from 'node:path'
+import fs from 'node:fs'
+import kintoneModuleInject from './kintoneModuleInject'
+import getServerInfo from './getServerInfo'
+import getIndexScripts from './getIndexScripts'
+import { validateEnv, checkEnv } from './getEnvInfo'
+import getEntry from './getEntry'
+import getDirFiles from './getDirFiles'
+import { TypeInput } from 'kintone-types'
 
+/**
+ * 为Kintone开发创建Vite插件
+ * @param options 插件配置选项
+ * @returns Vite插件数组
+ */
 export default function kintoneDev(options?: TypeInput): Plugin[] {
-  let viteConfig: ResolvedConfig;
-  let envConfig: ConfigEnv;
+  let viteConfig: ResolvedConfig
+  let envConfig: ConfigEnv
 
   return [
     {
-      name: "vite-plugin-kintone-dev:dev",
-      apply: "serve",
-      enforce: "post",
-      config: (config, env) => (envConfig = env),
+      name: 'vite-plugin-kintone-dev:dev',
+      apply: 'serve',
+      enforce: 'post',
+      config: (config, env) => {
+        envConfig = env
+
+        // 自动添加server配置，如果用户没有提供
+        if (!config.server) {
+          config.server = {}
+        }
+
+        // 设置host为127.0.0.1，如果未指定
+        if (!config.server.host) {
+          config.server.host = '127.0.0.1'
+        }
+
+        // 确保启用CORS
+        if (config.server.cors === undefined) {
+          config.server.cors = true
+        }
+
+        // 默认不启用HTTPS，除非用户显式配置
+        // 这样用户可以根据需要自己设置HTTPS
+        // 如果需要HTTPS，推荐使用如下配置：
+        // https: {
+        //   cert: fs.readFileSync('path/to/cert.pem'),
+        //   key: fs.readFileSync('path/to/key.pem')
+        // }
+
+        return config
+      },
       async configResolved(config) {
-        await checkEnv(envConfig, config);
-        viteConfig = config;
+        await checkEnv(envConfig, config)
+        viteConfig = config
       },
       configureServer(server) {
-        server.httpServer?.once("listening", async () => {
-          const { isEnvOk, env } = validateEnv(envConfig, viteConfig);
+        server.httpServer?.once('listening', async () => {
+          const { isEnvOk, env } = validateEnv(envConfig, viteConfig)
           if (!isEnvOk) {
-            console.log("env error");
-            return;
+            console.log('环境配置错误，请检查.env文件')
+            return
           }
-          const devServerUrl = getServerInfo(server);
+          const devServerUrl = getServerInfo(server)
           if (!server.config.server.origin) {
-            server.config.server.origin = devServerUrl;
+            server.config.server.origin = devServerUrl
           }
-          const outputDir = path.resolve(viteConfig.build.outDir);
+          const outputDir = path.resolve(viteConfig.build.outDir)
           if (!fs.existsSync(outputDir)) {
-            fs.mkdirSync(outputDir);
+            fs.mkdirSync(outputDir, { recursive: true })
           }
-          const scriptList = getIndexScripts();
-          const fileUrl = path.resolve(outputDir, devFileName);
+          const scriptList = getIndexScripts()
+          const fileUrl = path.resolve(outputDir, devFileName)
 
-          fs.writeFileSync(
-            fileUrl,
-            kintoneModuleInject(
-              devServerUrl,
-              scriptList,
-              env.VITE_KINTONE_REACT === "true" ? true : false
-            )
-          );
-          devUpdate(env, [fileUrl]).then((r) => {
-            fs.unlinkSync(fileUrl);
-          });
-        });
+          fs.writeFileSync(fileUrl, kintoneModuleInject(devServerUrl, scriptList, env.VITE_KINTONE_REACT === 'true'))
+
+          try {
+            const result = await devUpdate(env, [fileUrl])
+            console.log('开发模式：已成功上传模块注入脚本')
+            fs.unlinkSync(fileUrl)
+            return result
+          } catch (error) {
+            console.error('开发模式：上传失败', error)
+            fs.unlinkSync(fileUrl)
+          }
+        })
       },
     },
     {
-      name: "vite-plugin-kintone-dev:build",
-      apply: "build",
-      enforce: "post",
+      name: 'vite-plugin-kintone-dev:build',
+      apply: 'build',
+      enforce: 'post',
       config(config, env) {
-        envConfig = env;
-        const entry = getEntry(config);
+        envConfig = env
+        const entry = getEntry(config)
+
+        // 配置构建选项
         config.build = {
+          ...config.build,
           modulePreload: { polyfill: false },
           manifest: true,
           cssCodeSplit: false,
           rollupOptions: {
+            ...config.build?.rollupOptions,
             input: entry,
             output: {
-              format: "iife",
+              ...config.build?.rollupOptions?.output,
+              format: 'iife',
             },
           },
-        };
-
-        if (options?.outputName !== undefined) {
-          (
-            config.build.rollupOptions?.output as OutputOptions
-          ).entryFileNames = `${options?.outputName}.js`;
-          (config.build.rollupOptions?.output as OutputOptions).assetFileNames =
-            (assetInfo): string => {
-              if (assetInfo.name?.endsWith(".css")) {
-                return `${options?.outputName}[extname]`;
-              } else {
-                return assetInfo.name as string;
-              }
-            };
         }
+
+        // 处理自定义输出文件名
+        if (options?.outputName !== undefined) {
+          const output = config.build.rollupOptions?.output as OutputOptions
+          output.entryFileNames = `${options?.outputName}.js`
+          output.assetFileNames = (assetInfo: PreRenderedAsset): string => {
+            if (assetInfo.name?.endsWith('.css')) {
+              return `${options?.outputName}[extname]`
+            } else {
+              return assetInfo.name as string
+            }
+          }
+        }
+
+        return config
       },
       async configResolved(config) {
-        await checkEnv(envConfig, config);
-        viteConfig = config;
+        await checkEnv(envConfig, config)
+        viteConfig = config
       },
       async closeBundle() {
-        const outputDir = path.resolve(viteConfig.build.outDir);
-        const extList = ["js", "css"];
-        const fileList = getDirFiles(outputDir, extList);
-        const { isEnvOk, env } = validateEnv(envConfig, viteConfig);
+        const outputDir = path.resolve(viteConfig.build.outDir)
+        const extList = ['js', 'css']
+        const fileList = getDirFiles(outputDir, extList)
+        const { isEnvOk, env } = validateEnv(envConfig, viteConfig)
+
         if (isEnvOk) {
-          //是否需要根据output name来判断是否进行上传？
           if (options?.upload) {
-            devUpdate(env, fileList).catch(() => {
-              console.log("upload failed");
-            });
+            try {
+              await devUpdate(env, fileList)
+              console.log('构建模式：已成功上传构建文件')
+            } catch (error) {
+              console.error('构建模式：上传失败', error)
+            }
           }
         } else {
-          console.log("env error");
+          console.error('环境配置错误，请检查.env文件')
         }
       },
     },
-  ];
+  ]
 }
