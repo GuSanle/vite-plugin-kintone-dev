@@ -17,6 +17,86 @@ function createReactRefreshScript(devServerUrl: string): string {
 }
 
 /**
+ * 创建kintone事件代理和重触发机制脚本
+ * @returns kintone事件处理脚本
+ */
+function createKintoneEventProxy(): string {
+  return `
+  // 存储所有kintone原生事件及其参数
+  const kintoneEventStore = [];
+  // 用于标记ESM模块是否已加载完成
+  window.__KINTONE_DEV_ESM_LOADED__ = false;
+
+  // 保存原始事件注册方法
+  const originalAddEventListener = kintone.events && kintone.events.on;
+
+  if (originalAddEventListener) {
+    // 重写kintone事件注册方法
+    kintone.events.on = function(...args) {
+      const [eventType, callback] = args;
+
+      // 如果ESM已加载完成，使用常规方式注册
+      if (window.__KINTONE_DEV_ESM_LOADED__) {
+        return originalAddEventListener.apply(this, args);
+      }
+
+      // 否则记录事件处理函数，等待ESM加载完成后重触发
+      console.log('[kintone-dev] 注册事件:', eventType);
+      const result = originalAddEventListener.apply(this, args);
+
+      // 如果事件已经触发过，立即重触发
+      const storedEvents = kintoneEventStore.filter(e => e.type === eventType);
+      if (storedEvents.length > 0) {
+        console.log('[kintone-dev] 重触发事件:', eventType);
+        storedEvents.forEach(event => {
+          try {
+            callback(event.event);
+          } catch (err) {
+            console.error('[kintone-dev] 重触发事件处理错误:', err);
+          }
+        });
+      }
+
+      return result;
+    };
+
+    // 拦截并存储所有kintone事件
+    const originalDispatchEvent = cybozu.eventTarget.dispatchEvent;
+    cybozu.eventTarget.dispatchEvent = function(event) {
+      // 记录事件和参数
+      if (event.type.startsWith('app.')) {
+        console.log('[kintone-dev] 捕获kintone事件:', event.type);
+        kintoneEventStore.push({
+          type: event.type,
+          event: event
+        });
+      }
+      return originalDispatchEvent.apply(this, arguments);
+    };
+  }
+
+  // 标记脚本加载完成的函数
+  window.__KINTONE_DEV_MARK_LOADED__ = function() {
+    window.__KINTONE_DEV_ESM_LOADED__ = true;
+    console.log('[kintone-dev] ESM模块加载完成');
+  };
+  `
+}
+
+/**
+ * 创建ESM加载完成标记脚本
+ * @returns 加载完成脚本
+ */
+function createLoadCompleteScript(): string {
+  return `
+  // 标记ESM模块已加载完成
+  if (window.__KINTONE_DEV_MARK_LOADED__) {
+    window.__KINTONE_DEV_MARK_LOADED__();
+  }
+  `
+}
+
+/**
  * 生成Vite开发模式注入脚本
  * @param devServerUrl 开发服务器URL
  * @param scriptList 脚本列表
@@ -25,8 +105,12 @@ function createReactRefreshScript(devServerUrl: string): string {
  */
 export default function kintoneModuleInject(devServerUrl: string, scriptList: ScriptList, isReactMode = false): string {
   const reactScript = isReactMode ? createReactRefreshScript(devServerUrl) : ''
+  const kintoneEventProxyScript = createKintoneEventProxy()
 
   return `(function () {
+    // 注入kintone事件代理
+    ${kintoneEventProxyScript}
+
     // 注入Vite客户端
     const viteClientInject = document.createElement("script");
     viteClientInject.type = "module";
@@ -43,6 +127,17 @@ export default function kintoneModuleInject(devServerUrl: string, scriptList: Sc
       const script = document.createElement("script");
       script.type = type;
       script.src = "${devServerUrl}" + src;
+
+      // 对最后一个模块脚本添加加载完成标记
+      if (type === "module" && src === scriptList[scriptList.length - 1].src) {
+        const originalScript = script.src;
+        script.src = \`data:text/javascript;charset=utf-8,\${encodeURIComponent(\`
+          import * as mod from "\${originalScript}";
+          ${createLoadCompleteScript()}
+          export default mod;
+        \`)}\`;
+      }
+
       document.body.appendChild(script);
     }
 

@@ -61,6 +61,19 @@ vite build时，会删除这段js脚本。并生成build后的js文件。
 ## Vite 6 支持
 本插件现已支持Vite 6，提供了更好的性能和错误处理。所有必要的服务器配置（host、cors）都会由插件自动添加，因此你不需要手动设置它们。
 
+## Kintone事件注册时机问题自动解决
+
+本插件现在自动解决了使用ESM模块时kintone事件处理程序注册时机的常见问题。这个问题的产生是因为kintone页面事件在ESM模块完全加载之前就被触发，导致事件处理程序无法捕获事件。
+
+### 解决的问题：
+
+- **事件注册时机**：插件会拦截并存储在自定义代码加载前发生的kintone事件
+- **自动重触发**：当ESM模块注册事件处理程序时，插件会自动重触发已存储的事件
+- **仅开发模式**：此解决方案仅在开发模式下应用，因为生产构建不使用ESM
+- **无需修改代码**：你不需要在应用程序中添加任何特殊代码
+
+这个解决方案解决了[kintone文档中描述的事件处理程序注册时机问题](https://cybozudev.kf5.com/hc/kb/article/1434396)，且无需在应用程序中添加任何额外代码。
+
 ## Example
 
 kintone mobile demo:  
@@ -76,29 +89,6 @@ example: [vue-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-
 
 **kintone + react + vite**  
 example: [react-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/react-kintone-vite-demo)
-
-## Note
-
-如果开发时遇到[事件句柄的注册时机](https://cybozudev.kf5.com/hc/kb/article/1434396) 问题，
-可以尝试在使用 kintone 事件后挂载后，使用如下代码解决问题。  
-（构建时，可以删除，因为构建时，不再使用 esm 模式，不存在异步加载问题。）  
-src/main.ts 的示例：
-
-```ts
-import { createApp } from "vue";
-import App from "./App.vue";
-
-kintone.events.on("app.record.detail.show", (event) => {
-  const app = createApp(App);
-  app.mount(kintone.app.record.getHeaderMenuSpaceElement()!);
-  return event;
-});
-
-//通过手动执行kintone事件，来解决异步事件执行时机问题
-const event = new Event("load");
-// @ts-ignore
-cybozu.eventTarget.dispatchEvent(event);
-```
 
 ## 静态资源处理
 

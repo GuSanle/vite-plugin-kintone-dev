@@ -130,3 +130,5 @@ dist
 .pnp.*
 
 test
+
+.env.development

@@ -60,6 +60,19 @@ After launching vite dev the 'vite_plugin_kintone_dev_module_hack.js' script wil
 ## Vite 6 Support
 This plugin now supports Vite 6 with improved performance and better error handling. All necessary server configurations (host, cors) are automatically added by the plugin, so you don't need to manually set them up.
 
+## Automatic Kintone Event Timing Fix
+
+This plugin automatically resolves the common issue with kintone event handler registration timing when using ESM modules. The problem occurs because kintone page events are fired before ESM modules are fully loaded, causing event handlers to miss events. 
+
+### What's Fixed:
+
+- **Event Registration Timing**: The plugin intercepts and stores kintone events that occur before your custom code is loaded
+- **Automatic Re-triggering**: When your ESM module registers event handlers, the plugin automatically re-triggers stored events
+- **Development Only**: This fix is only applied during development mode, as production builds don't use ESM
+- **No Code Changes Required**: You don't need to add any special code to your application
+
+This solution addresses the issue described in the [Kintone documentation about event handler registration timing](https://cybozudev.zendesk.com/hc/ja/articles/360000882123) without requiring any additional code in your application.
+
 ## Example
 
 Some kintone mobile demo:  
@@ -75,28 +88,6 @@ example: [vue-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-
 
 **kintone + react + vite**  
 example: [react-kintone-vite-demo](https://github.com/GuSanle/vite-plugin-kintone-dev/tree/main/example/react-kintone-vite-demo)
-
-## Note
-
-If you encounter the issue of [イベントハンドラー登録の適切なタイミングについて](https://cybozudev.zendesk.com/hc/ja/articles/360000882123) during development,you can try to solve the problem by using the following code after mounting after using the kintone event.  
-(During the build, it can be deleted, because the esm mode is no longer used during the build, there is no asynchronous loading problem.)  
-Example of src/main.ts:
-
-```ts
-import { createApp } from "vue";
-import App from "./App.vue";
-
-kintone.events.on("app.record.detail.show", (event) => {
-  const app = createApp(App);
-  app.mount(kintone.app.record.getHeaderMenuSpaceElement()!);
-  return event;
-});
-
-//Solve the timing issue of asynchronous event execution by manually executing the kintone event.
-const event = new Event("load");
-// @ts-ignore
-cybozu.eventTarget.dispatchEvent(event);
-```
 
 ## Development
 

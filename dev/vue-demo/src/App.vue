@@ -22,7 +22,7 @@ import LogoURL from './assets/logo.svg'
       </div>
     </div>
 
-    <h1>Kintone Vue Development Demo</h1>
+    <h1>Vue Development Demo</h1>
     <p>This is a sample project using vite-plugin-kintone-dev</p>
     <p>This example demonstrates how to handle static resources in a Kintone plugin</p>
   </div>
