@@ -80,7 +80,7 @@ kintone mobile demo:
 **React + TypeScript + Vite + kintone + material-ui**  
 example: [kintone mobile custom demo(react)](https://github.com/GuSanle/kintone-vite-mui-demo)
 
-**kintone mobile custom demo (vite4 + vue3 + vant4 + typescript)**  
+**kintone mobile custom demo (vite6 + vue3 + vant4 + typescript)**  
 <img src="images/vantdemo.png" width="200" >  
 example: [kintone mobile custom demo(vue)](https://github.com/GuSanle/kintone-mobile-custom-demo)
 
