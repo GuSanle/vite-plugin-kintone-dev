@@ -1,6 +1,11 @@
 # Changelog
 
-## v1.4.0 (Pre-release)
+## v2.0.0
+
+### New Features
+- Automatic Kintone Event Timing Fix
+
+## v1.4.0
 
 ### New Features
 - Support for Vite 6
