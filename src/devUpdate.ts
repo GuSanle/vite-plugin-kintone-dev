@@ -55,7 +55,7 @@ function validateEnvironment(env: unknown): boolean {
  */
 export const devUpdate = async (env: unknown, fileList: string[]): Promise<void> => {
   if (!validateEnvironment(env)) {
-    throw new Error('环境配置无效，请检查您的.env文件')
+    throw new Error('Invalid environment configuration, please check your .env file')
   }
 
   const envConfig = env as EnvSetting
@@ -119,7 +119,7 @@ export const devUpdate = async (env: unknown, fileList: string[]): Promise<void>
       appName = appInfo.name
       customSetting = await kintoneClient.getAppSetting(app)
     } else {
-      throw new Error('环境设置错误：APP模式下需要应用ID')
+      throw new Error('Environment setting error: APP ID is required in APP mode')
     }
 
     const { scripts, scope } = customSetting.result
@@ -161,6 +161,6 @@ export const devUpdate = async (env: unknown, fileList: string[]): Promise<void>
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error)
 
-    throw new Error(`上传失败: ${errorMessage}`)
+    throw new Error(`Upload failed: ${errorMessage}`)
   }
 }

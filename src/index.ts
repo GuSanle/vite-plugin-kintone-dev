@@ -61,7 +61,7 @@ export default function kintoneDev(options?: TypeInput): Plugin[] {
         server.httpServer?.once('listening', async () => {
           const { isEnvOk, env } = validateEnv(envConfig, viteConfig)
           if (!isEnvOk) {
-            console.log('环境配置错误，请检查.env文件')
+            console.log('Environment configuration error, please check your .env file')
             return
           }
           const devServerUrl = getServerInfo(server)
@@ -79,11 +79,11 @@ export default function kintoneDev(options?: TypeInput): Plugin[] {
 
           try {
             const result = await devUpdate(env, [fileUrl])
-            console.log('开发模式：已成功上传模块注入脚本')
+            console.log('Development mode: Module injection script uploaded successfully')
             fs.unlinkSync(fileUrl)
             return result
           } catch (error) {
-            console.error('开发模式：上传失败', error)
+            console.error('Development mode: Upload failed', error)
             fs.unlinkSync(fileUrl)
           }
         })
@@ -142,13 +142,13 @@ export default function kintoneDev(options?: TypeInput): Plugin[] {
           if (options?.upload) {
             try {
               await devUpdate(env, fileList)
-              console.log('构建模式：已成功上传构建文件')
+              console.log('Build mode: Build files uploaded successfully')
             } catch (error) {
-              console.error('构建模式：上传失败', error)
+              console.error('Build mode: Upload failed', error)
             }
           }
         } else {
-          console.error('环境配置错误，请检查.env文件')
+          console.error('Environment configuration error, please check your .env file')
         }
       },
     },

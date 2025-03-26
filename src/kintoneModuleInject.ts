@@ -41,18 +41,18 @@ function createKintoneEventProxy(): string {
       }
 
       // 否则记录事件处理函数，等待ESM加载完成后重触发
-      console.log('[kintone-dev] 注册事件:', eventType);
+      console.log('[kintone-dev] Registering event:', eventType);
       const result = originalAddEventListener.apply(this, args);
 
       // 如果事件已经触发过，立即重触发
       const storedEvents = kintoneEventStore.filter(e => e.type === eventType);
       if (storedEvents.length > 0) {
-        console.log('[kintone-dev] 重触发事件:', eventType);
+        console.log('[kintone-dev] Re-triggering event:', eventType);
         storedEvents.forEach(event => {
           try {
             callback(event.event);
           } catch (err) {
-            console.error('[kintone-dev] 重触发事件处理错误:', err);
+            console.error('[kintone-dev] Re-triggering event handling error:', err);
           }
         });
       }
@@ -65,7 +65,7 @@ function createKintoneEventProxy(): string {
     cybozu.eventTarget.dispatchEvent = function(event) {
       // 记录事件和参数
       if (event.type.startsWith('app.')) {
-        console.log('[kintone-dev] 捕获kintone事件:', event.type);
+        console.log('[kintone-dev] Capturing kintone event:', event.type);
         kintoneEventStore.push({
           type: event.type,
           event: event
@@ -78,7 +78,7 @@ function createKintoneEventProxy(): string {
   // 标记脚本加载完成的函数
   window.__KINTONE_DEV_MARK_LOADED__ = function() {
     window.__KINTONE_DEV_ESM_LOADED__ = true;
-    console.log('[kintone-dev] ESM模块加载完成');
+    console.log('[kintone-dev] ESM module loading completed');
   };
   `
 }
