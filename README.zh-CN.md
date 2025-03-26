@@ -5,7 +5,7 @@
 
 [English](https://github.com/GuSanle/vite-plugin-kintone-dev/blob/main/README.md) | [日本語](https://github.com/GuSanle/vite-plugin-kintone-dev/blob/main/README.ja.md) ｜ 简体中文
 
-这是一个 vite 插件，让你可以使用 vite 来进行 kintone 开发。我们知道 vite 使用 esm 来进行模块加载，而 kintone 上传自定义 js 时无法指定使用 esm 来加载。通过这个插件，能让你在本地开发时使用 esm 模块加载你的代码，实现 vite 构建。通过 hmr，让你的开发体验快如闪电。
+这是一个 vite 插件，让你可以使用 vite 来进行 kintone 开发。我们知道 vite 使用 esm 来进行模块加载，而 kintone 上传自定义 js 时无法指定使用 esm 来加载。通过这个插件，能让你在本地开发时使用 esm 模块加载你的代码，实现 vite 构建。
 
 ## Disclaimer
 
