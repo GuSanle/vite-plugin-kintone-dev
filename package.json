@@ -26,7 +26,10 @@
     "example:build": "pnpm -r --filter=vue-dev-demo build"
   },
   "homepage": "https://github.com/GuSanle/vite-plugin-kintone-dev",
-  "repository": "https://github.com/GuSanle/vite-plugin-kintone-dev.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GuSanle/vite-plugin-kintone-dev.git"
+  },
   "keywords": [
     "vite",
     "vite-plugin",
