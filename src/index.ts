@@ -83,7 +83,9 @@ export default function kintoneDev(options?: TypeInput): Plugin[] {
             fs.unlinkSync(fileUrl)
             return result
           } catch (error) {
+            const info = `.env または .env.development ファイルで 特殊文字（例: $, #, !, &, * など）を含むパスワード を設定する場合、\（バックスラッシュ）でエスケープ することを推奨します。If your password contains special characters (e.g. $, #, !, &, * etc.) in .env or .env.development files, we recommend escaping them with \ (backslash).`
             console.error('Development mode: Upload failed', error)
+            console.error(info)
             fs.unlinkSync(fileUrl)
           }
         })
